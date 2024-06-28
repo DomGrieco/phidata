@@ -149,6 +149,54 @@ def main() -> None:
         investment_assistant_enabled = investment_assistant
         restart_assistant()
 
+    #Enable programmer assistant
+    if "programmer_assistant_enabled" not in st.session_state:
+        st.session_state["programmer_assistant_enabled"] = False
+    # Get programmer_assistant_enabled from session state if set
+    programmer_assistant_enabled = st.session_state["programmer_assistant_enabled"]
+    # Checkbox for enabling web search
+    programmer_assistant = st.sidebar.checkbox(
+        "Programmer Assistant",
+        value=programmer_assistant_enabled,
+        help="Enable the programmer assistant.",
+    )
+    if programmer_assistant_enabled != programmer_assistant:
+        st.session_state["programmer_assistant_enabled"] = programmer_assistant
+        programmer_assistant_enabled = programmer_assistant
+        restart_assistant()
+
+    #Enable game designer assistant
+    if "game_designer_assistant_enabled" not in st.session_state:
+        st.session_state["game_designer_assistant_enabled"] = False
+    # Get game_designer_assistant_enabled from session state if set
+    game_designer_assistant_enabled = st.session_state["game_designer_assistant_enabled"]
+    # Checkbox for enabling web search
+    game_designer_assistant = st.sidebar.checkbox(
+        "Game Designer Assistant",
+        value=game_designer_assistant_enabled,
+        help="Enable the Game Designer Asistant.",
+    )
+    if game_designer_assistant_enabled != game_designer_assistant:
+        st.session_state["game_designer_assistant_enabled"] = game_designer_assistant
+        game_designer_assistant_enabled = game_designer_assistant
+        restart_assistant()
+
+    #Enable Booking System Developer Assistant
+    if "booking_system_developer_assistant_enabled" not in st.session_state:
+        st.session_state["booking_system_developer_assistant_enabled"] = False
+    # Get booking_system_developer_assistant_enabled from session state if set
+    booking_system_developer_assistant_enabled = st.session_state["booking_system_developer_assistant_enabled"]
+    # Checkbox for enabling web search
+    booking_system_developer_assistant = st.sidebar.checkbox(
+        "Booking System Developer Assistant",
+        value=booking_system_developer_assistant_enabled,
+        help="Enable the Booking System Developer Assistant.",
+    )
+    if booking_system_developer_assistant_enabled != booking_system_developer_assistant:
+        st.session_state["booking_system_developer_assistant_enabled"] = booking_system_developer_assistant
+        booking_system_developer_assistant_enabled = booking_system_developer_assistant
+        restart_assistant()
+
     # Get the assistant
     llm_os: Assistant
     if "llm_os" not in st.session_state or st.session_state["llm_os"] is None:
@@ -163,6 +211,9 @@ def main() -> None:
             python_assistant=python_assistant_enabled,
             research_assistant=research_assistant_enabled,
             investment_assistant=investment_assistant_enabled,
+            programmer_assistant=programmer_assistant_enabled,
+            game_designer_assistant=game_designer_assistant_enabled,
+            booking_system_developer_assistant=booking_system_developer_assistant_enabled,
         )
         st.session_state["llm_os"] = llm_os
     else:
@@ -279,6 +330,9 @@ def main() -> None:
                 python_assistant=python_assistant_enabled,
                 research_assistant=research_assistant_enabled,
                 investment_assistant=investment_assistant_enabled,
+                programmer_assistant=programmer_assistant_enabled,
+                game_designer_assistant=game_designer_assistant_enabled,
+                booking_system_developer_assistant=booking_system_developer_assistant_enabled,
                 run_id=new_llm_os_run_id,
             )
             st.rerun()

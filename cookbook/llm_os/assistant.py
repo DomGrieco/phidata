@@ -38,6 +38,11 @@ def get_llm_os(
     python_assistant: bool = False,
     research_assistant: bool = False,
     investment_assistant: bool = False,
+    programmer_assistant: bool = False,
+    #story_writer_assistant: bool = False,
+    game_designer_assistant: bool = False,
+    booking_system_developer_assistant: bool = False,
+
     user_id: Optional[str] = None,
     run_id: Optional[str] = None,
     debug_mode: bool = True,
@@ -223,6 +228,147 @@ def get_llm_os(
                 "Never provide investment advise without the investment report.",
             ]
         )
+    
+    if programmer_assistant:
+        _programmer_assistant = Assistant(
+            name="Programmer Assistant",
+            role="Develop and document code",
+            llm=OpenAIChat(model=llm_id),
+            description="You are a Senior Programmer tasked with developing and documenting code for various software projects.",
+            instructions=[
+                "Write code for the given project requirements.",
+                "Ensure the code is efficient, well-documented, and maintainable.",
+                "Follow best practices for software development.",
+                "Provide detailed documentation for the codebase."
+            ],
+            expected_output=dedent(
+                """\
+            <code_format>
+            ## Code Implementation
+
+            ### Function Definitions
+            {function definitions and their brief descriptions}
+
+            ### Core Logic
+            {implementation of core logic}
+
+            ### Examples
+            {code examples demonstrating how to use the implemented functions or classes}
+
+            </code_format>
+            """
+            ),
+            tools=[ExaTools(num_results=5, text_length_limit=1000)],
+            markdown=True,
+            add_datetime_to_instructions=True,
+            debug_mode=debug_mode,
+        )
+        team.append(_programmer_assistant)
+        extra_instructions.extend(
+        [
+            "To get the code implementation, delegate the task to the `Programmer Assistant`.",
+            "Return the code in the <code_format> to the user without any additional text like 'here is the code'.",
+            "Ensure the code is efficient, well-documented, and maintainable."
+        ]
+    )
+        
+    if game_designer_assistant:
+        _game_designer_assistant = Assistant(
+            name="Game Designer Assistant",
+            role="Create and iterate on game concepts",
+            llm=OpenAIChat(model=llm_id),
+            description="You are a Senior Game Designer tasked with creating or iterating on game concepts.",
+            instructions=[
+                "Develop a detailed game concept inspired by Darkages, Stardew Valley, Nexus TK, Guild Wars 2, Terraria, World of Warcraft and other original successful games.",
+                "Include key gameplay mechanics, story elements, and visual style.",
+                "Make the concept engaging and detailed to guide the development team."
+            ],
+            #expected_output=dedent(
+            #        """\
+            #    <game_format>
+            #    ## Game Concept Document
+#
+            #    ### Overview
+            #    {introduction to the game concept}
+#
+            #    ### Gameplay Mechanics
+            #    {detailed description of gameplay mechanics}
+#
+            #    ### Story Elements
+            #    {outline of the game's story}
+#
+            #    ### Visual Style
+            #    {description of the visual style and inspirations}
+#
+            #    ### Key Features
+            #    {list of key features of the game}
+#
+            #    </game_format>
+            #    """
+            #),
+            tools=[],
+            markdown=True,
+            add_datetime_to_instructions=True,
+            debug_mode=debug_mode,
+        )
+        team.append(_game_designer_assistant)
+        extra_instructions.extend(
+            [
+                "To get a detailed game concept, delegate the task to the `Game Designer Assistant`.",
+                #"Return the concept document in the <game_format> to the user without any additional text like 'here is the concept'.",
+                "Ensure the concept is comprehensive and aligns with the game's inspirations."
+            ]
+    )
+        
+    if booking_system_developer_assistant:
+        _booking_system_developer_assistant = Assistant(
+            name="Booking System Developer Assistant",
+            role="Guide on developing a responsive web app for a water park's booking system",
+            llm=OpenAIChat(model=llm_id),
+            description="You are an expert in web app development, guiding the user through the creation of a responsive and feature-rich booking system for an inflatable water park.",
+            instructions=[
+                "Start with setting up a Git repository and initializing Node.js and React.js projects.",
+                "Guide on creating an attractive home page with park information, safety guidelines, and booking call-to-actions using React.js.",
+                "Provide detailed steps for developing a booking system where customers can select a date and time slot, choose the number of tickets, and add them to the cart.",
+                "Offer advice on integrating party package options with addons.",
+                "Explain the process of integrating Stripe for secure payment processing.",
+                "Assist in creating user accounts for viewing booking history and managing bookings.",
+                "Ensure mobile responsiveness for an intuitive mobile-friendly design.",
+                "Help users set up Node.js with Express for API handling and MongoDB or PostgreSQL for database management.",
+                "Guide on creating an admin panel for managing bookings, schedules, and scanning tickets.",
+                "Provide steps for implementing QR code or barcode scanning functionality for checking in customers.",
+                "Explain how to generate reports on sales, bookings, and attendance.",
+                "Recommend React.js for a dynamic and responsive user interface.",
+                "Suggest Node.js with Express for API handling and MongoDB or PostgreSQL for database management.",
+                "Advise on using Stripe for payment processing, Firebase for authentication, Twilio SendGrid for email communication, and Heroku or AWS for deployment.",
+                "Guide users through the initial setup of the Git repository, Node.js, and React.js projects.",
+                "Help define database schemas for users, bookings, party packages, and addons.",
+                "Assist in creating RESTful API endpoints for user authentication, ticket booking, party package booking, payment processing, and admin functionalities.",
+                "Provide steps for building home pages, booking pages, user account pages, and integrating Stripe Checkout.",
+                "Guide on creating an admin dashboard for managing bookings and ticket scanning.",
+                "Advise on testing using Jest and Cypress.",
+                "Explain the deployment process for backend and frontend.",
+                "Offer tips for SEO optimization.",
+                "Suggest strategies for social media integration.",
+                "Guide on implementing a feedback system for customer reviews.",
+                "Provide advice on setting up customer support.",
+                "Recommend regular updates for new features and security patches.",
+                "Guide on analyzing user feedback and usage data to make informed improvements.",
+                "Suggest developing a mobile app to complement the web app for better user experience.",
+            ],
+            tools=[ExaTools(num_results=5, text_length_limit=1000)],
+            markdown=True,
+            add_datetime_to_instructions=True,
+            debug_mode=debug_mode,
+        )
+        team.append(_booking_system_developer_assistant)
+        extra_instructions.extend(
+            [
+                "To get guidance on developing a booking system, delegate the task to the `Booking System Developer Assistant`. ",
+                "Ensure all code is efficient, well-documented, and maintainable.",
+            ]
+    )
+
 
     # Create the LLM OS Assistant
     llm_os = Assistant(
