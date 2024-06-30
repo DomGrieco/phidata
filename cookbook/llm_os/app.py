@@ -197,6 +197,22 @@ def main() -> None:
         booking_system_developer_assistant_enabled = booking_system_developer_assistant
         restart_assistant()
 
+    #Enable Flutter Teacher Assistant
+    if "flutter_teacher_enabled" not in st.session_state:
+        st.session_state["flutter_teacher_enabled"] = False
+    # Get flutter_teacher_enabled from session state if set
+    flutter_teacher_enabled = st.session_state["flutter_teacher_enabled"]
+    # Checkbox for enabling web search
+    flutter_teacher = st.sidebar.checkbox(
+        "Flutter Teacher Assistant",
+        value=flutter_teacher_enabled,
+        help="Enable the Flutter Teacher Assistant.",
+    )
+    if flutter_teacher_enabled != flutter_teacher:
+        st.session_state["flutter_teacher_enabled"] = flutter_teacher
+        flutter_teacher_enabled = flutter_teacher
+        restart_assistant()
+
     # Get the assistant
     llm_os: Assistant
     if "llm_os" not in st.session_state or st.session_state["llm_os"] is None:
@@ -214,6 +230,7 @@ def main() -> None:
             programmer_assistant=programmer_assistant_enabled,
             game_designer_assistant=game_designer_assistant_enabled,
             booking_system_developer_assistant=booking_system_developer_assistant_enabled,
+            flutter_teacher = flutter_teacher_enabled,
         )
         st.session_state["llm_os"] = llm_os
     else:
@@ -333,6 +350,7 @@ def main() -> None:
                 programmer_assistant=programmer_assistant_enabled,
                 game_designer_assistant=game_designer_assistant_enabled,
                 booking_system_developer_assistant=booking_system_developer_assistant_enabled,
+                flutter_teacher = flutter_teacher_enabled,
                 run_id=new_llm_os_run_id,
             )
             st.rerun()

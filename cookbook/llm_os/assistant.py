@@ -42,6 +42,7 @@ def get_llm_os(
     #story_writer_assistant: bool = False,
     game_designer_assistant: bool = False,
     booking_system_developer_assistant: bool = False,
+    flutter_teacher: bool = False,
 
     user_id: Optional[str] = None,
     run_id: Optional[str] = None,
@@ -283,29 +284,6 @@ def get_llm_os(
                 "Include key gameplay mechanics, story elements, and visual style.",
                 "Make the concept engaging and detailed to guide the development team."
             ],
-            #expected_output=dedent(
-            #        """\
-            #    <game_format>
-            #    ## Game Concept Document
-#
-            #    ### Overview
-            #    {introduction to the game concept}
-#
-            #    ### Gameplay Mechanics
-            #    {detailed description of gameplay mechanics}
-#
-            #    ### Story Elements
-            #    {outline of the game's story}
-#
-            #    ### Visual Style
-            #    {description of the visual style and inspirations}
-#
-            #    ### Key Features
-            #    {list of key features of the game}
-#
-            #    </game_format>
-            #    """
-            #),
             tools=[],
             markdown=True,
             add_datetime_to_instructions=True,
@@ -315,7 +293,6 @@ def get_llm_os(
         extra_instructions.extend(
             [
                 "To get a detailed game concept, delegate the task to the `Game Designer Assistant`.",
-                #"Return the concept document in the <game_format> to the user without any additional text like 'here is the concept'.",
                 "Ensure the concept is comprehensive and aligns with the game's inspirations."
             ]
     )
@@ -368,6 +345,38 @@ def get_llm_os(
                 "Ensure all code is efficient, well-documented, and maintainable.",
             ]
     )
+        
+    if flutter_teacher:
+        _flutter_teacher = Assistant(
+            name="Flutter Mastery",
+            role="Teach Flutter and Dart",
+            llm=OpenAIChat(model=llm_id),
+            description="You are an expert in Flutter and Dart, providing comprehensive tutorials, code snippets, and project-based learning from beginner to advanced levels.",
+            instructions=[
+                "Ask users to specify their current level and learning goals, e.g., 'Are you a beginner, intermediate, or advanced learner?'",
+                "Based on user responses, suggest a tailored learning path and resources.",
+                "Organize responses in a clear, structured format with bullet points, numbered lists, and clear headings.",
+                "Provide interactive exercises and quizzes to reinforce learning.",
+                "Guide users through practical scenarios and projects, e.g., 'Let’s build a simple Flutter app together.'",
+                "Suggest relevant articles, video tutorials, and documentation based on the user's current topic.",
+                "If users upload code or project files, analyze and provide feedback or suggestions.",
+                "Use the browser tool to stay updated with the latest Flutter and Dart trends.",
+                "Include links for users to share their progress, ask for help, or provide feedback.",
+                "Maintain an expert tone throughout interactions, ensuring responses are knowledgeable and accurate."
+            ],
+            tools=[ExaTools(num_results=5, text_length_limit=1000)],
+            markdown=True,
+            add_datetime_to_instructions=True,
+            debug_mode=debug_mode,
+        )
+        team.append(_flutter_teacher)
+        extra_instructions.extend(
+            [
+                "To get personalized Flutter and Dart lessons, delegate the task to `Flutter Mastery`.",
+                "Ensure the learning path is tailored to the user's current level and interests."
+            ]
+    )
+
 
 
     # Create the LLM OS Assistant
