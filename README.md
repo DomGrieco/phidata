@@ -1,212 +1,447 @@
-<h1 align="center">
+<h1 align="center" id="top">
   phidata
 </h1>
 
 <h3 align="center">
-Build AI Assistants with memory, knowledge and tools
+Build Agents with memory, knowledge, tools and reasoning
 </h3>
 
-![image](https://github.com/phidatahq/phidata/assets/22579644/295187f6-ac9d-41e0-abdb-38e3291ad1d1)
+<img
+  src="https://github.com/user-attachments/assets/44739d09-2ec4-49b7-bea1-b275afccc592"
+  style="border-radius: 8px;"
+/>
 
 ## What is phidata?
 
-**Phidata is a framework for building Autonomous Assistants** (aka Agents) that have long-term memory, contextual knowledge and the ability to take actions using function calling.
+**Phidata is a framework for building agentic systems**, engineers use phidata to:
 
-Use phidata to turn any LLM into an AI Assistant that can:
-- **Search the web** using DuckDuckGo, Google etc.
-- **Analyze data** using SQL, DuckDb, etc.
-- **Conduct research** and generate reports.
-- **Answer questions** from PDFs, APIs, etc.
-- **Write scripts** for movies, books, etc.
-- **Summarize** articles, videos, etc.
-- **Perform tasks** like sending emails, querying databases, etc.
-- **And much more...**
+- **Build Agents with memory, knowledge, tools and reasoning.** [examples](#web-search-agent)
+- **Build teams of Agents that can work together.** [example](#team-of-agents)
+- **Chat with Agents using a beautiful Agent UI.** [example](#agent-ui)
+- **Monitor, evaluate and optimize Agents.** [example](#monitoring)
+- **Build agentic systems i.e. applications with an API, database and vectordb.**
 
-## Why phidata?
-
-**Problem:** We need to turn general-purpose LLMs into specialized assistants for our use-case.
-
-**Solution:** Extend LLMs with memory, knowledge and tools:
-- **Memory:** Stores **chat history** in a database and enables LLMs to have long-term conversations.
-- **Knowledge:** Stores information in a vector database and provides LLMs with **business context**.
-- **Tools:** Enable LLMs to **take actions** like pulling data from an API, sending emails or querying a database.
-
-Memory & knowledge make LLMs **smarter** while tools make them **autonomous**.
-
-## How it works
-
-- **Step 1:** Create an `Assistant`
-- **Step 2:** Add Tools (functions), Knowledge (vectordb) and Storage (database)
-- **Step 3:** Serve using Streamlit, FastApi or Django to build your AI application
-
-
-## Installation
+## Install
 
 ```shell
 pip install -U phidata
 ```
 
-## Quickstart
+## Agents
 
-### Assistant that can search the web
+### Web Search Agent
 
-Create a file `assistant.py`
+Let's start by building a simple agent that can search the web, create a file `web_search.py`
 
 ```python
-from phi.assistant import Assistant
+from phi.agent import Agent
+from phi.model.openai import OpenAIChat
 from phi.tools.duckduckgo import DuckDuckGo
 
-assistant = Assistant(tools=[DuckDuckGo()], show_tool_calls=True)
-assistant.print_response("Whats happening in France?", markdown=True)
-```
-
-Install libraries, export your `OPENAI_API_KEY` and run the `Assistant`
-
-```shell
-pip install openai duckduckgo-search
-
-export OPENAI_API_KEY=sk-xxxx
-
-python assistant.py
-```
-
-### Assistant that can query financial data
-
-Create a file `finance_assistant.py`
-
-```python
-from phi.assistant import Assistant
-from phi.llm.openai import OpenAIChat
-from phi.tools.yfinance import YFinanceTools
-
-assistant = Assistant(
-    llm=OpenAIChat(model="gpt-4o"),
-    tools=[YFinanceTools(stock_price=True, analyst_recommendations=True, company_info=True, company_news=True)],
+web_agent = Agent(
+    name="Web Agent",
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[DuckDuckGo()],
+    instructions=["Always include sources"],
     show_tool_calls=True,
     markdown=True,
 )
-assistant.print_response("What is the stock price of NVDA")
-assistant.print_response("Write a comparison between NVDA and AMD, use all tools available.")
+web_agent.print_response("Whats happening in France?", stream=True)
 ```
 
-Install libraries and run the `Assistant`
+Install libraries, export your `OPENAI_API_KEY` and run the Agent:
+
+```shell
+pip install phidata openai duckduckgo-search
+
+export OPENAI_API_KEY=sk-xxxx
+
+python web_search.py
+```
+
+### Finance Agent
+
+Lets create another agent that can query financial data, create a file `finance_agent.py`
+
+```python
+from phi.agent import Agent
+from phi.model.openai import OpenAIChat
+from phi.tools.yfinance import YFinanceTools
+
+finance_agent = Agent(
+    name="Finance Agent",
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[YFinanceTools(stock_price=True, analyst_recommendations=True, company_info=True, company_news=True)],
+    instructions=["Use tables to display data"],
+    show_tool_calls=True,
+    markdown=True,
+)
+finance_agent.print_response("Summarize analyst recommendations for NVDA", stream=True)
+```
+
+Install libraries and run the Agent:
 
 ```shell
 pip install yfinance
 
-python finance_assistant.py
+python finance_agent.py
 ```
 
-## More information
+## Team of Agents
+
+Now lets create a team of agents using the agents above, create a file `agent_team.py`
+
+```python
+from phi.agent import Agent
+from phi.model.openai import OpenAIChat
+from phi.tools.duckduckgo import DuckDuckGo
+from phi.tools.yfinance import YFinanceTools
+
+web_agent = Agent(
+    name="Web Agent",
+    role="Search the web for information",
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[DuckDuckGo()],
+    instructions=["Always include sources"],
+    show_tool_calls=True,
+    markdown=True,
+)
+
+finance_agent = Agent(
+    name="Finance Agent",
+    role="Get financial data",
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[YFinanceTools(stock_price=True, analyst_recommendations=True, company_info=True)],
+    instructions=["Use tables to display data"],
+    show_tool_calls=True,
+    markdown=True,
+)
+
+agent_team = Agent(
+    team=[web_agent, finance_agent],
+    model=OpenAIChat(id="gpt-4o"),
+    instructions=["Always include sources", "Use tables to display data"],
+    show_tool_calls=True,
+    markdown=True,
+)
+
+agent_team.print_response("Summarize analyst recommendations and share the latest news for NVDA", stream=True)
+```
+
+Run the Agent team:
+
+```shell
+python agent_team.py
+```
+
+## Reasoning Agents
+
+Reasoning is an experimental feature that helps agents work through a problem step-by-step, backtracking and correcting as needed. Create a file `reasoning_agent.py`.
+
+```python
+from phi.agent import Agent
+from phi.model.openai import OpenAIChat
+
+task = (
+    "Three missionaries and three cannibals need to cross a river. "
+    "They have a boat that can carry up to two people at a time. "
+    "If, at any time, the cannibals outnumber the missionaries on either side of the river, the cannibals will eat the missionaries. "
+    "How can all six people get across the river safely? Provide a step-by-step solution and show the solutions as an ascii diagram"
+)
+
+reasoning_agent = Agent(model=OpenAIChat(id="gpt-4o"), reasoning=True, markdown=True, structured_outputs=True)
+reasoning_agent.print_response(task, stream=True, show_full_reasoning=True)
+```
+
+Run the Reasoning Agent:
+
+```shell
+python reasoning_agent.py
+```
+
+> [!WARNING]
+> Reasoning is an experimental feature and will break ~20% of the time. **It is not a replacement for o1.**
+>
+> It is an experiment fueled by curiosity, combining COT and tool use. Set your expectations very low for this initial release. For example: It will not be able to count ‘r’s in ‘strawberry’.
+
+> [!TIP]
+> If using tools with `reasoning=True`, set `structured_outputs=False` because gpt-4o doesnt support tools with structured outputs.
+
+## RAG Agent
+
+Instead of always inserting the "context" into the prompt, the RAG Agent can search its knowledge base (vector db) for the specific information it needs to achieve its task.
+
+This saves tokens and improves response quality. Create a file `rag_agent.py`
+
+```python
+from phi.agent import Agent
+from phi.model.openai import OpenAIChat
+from phi.embedder.openai import OpenAIEmbedder
+from phi.knowledge.pdf import PDFUrlKnowledgeBase
+from phi.vectordb.lancedb import LanceDb, SearchType
+
+# Create a knowledge base from a PDF
+knowledge_base = PDFUrlKnowledgeBase(
+    urls=["https://phi-public.s3.amazonaws.com/recipes/ThaiRecipes.pdf"],
+    # Use LanceDB as the vector database
+    vector_db=LanceDb(
+        table_name="recipes",
+        uri="tmp/lancedb",
+        search_type=SearchType.vector,
+        embedder=OpenAIEmbedder(model="text-embedding-3-small"),
+    ),
+)
+# Comment out after first run as the knowledge base is loaded
+knowledge_base.load()
+
+agent = Agent(
+    model=OpenAIChat(id="gpt-4o"),
+    # Add the knowledge base to the agent
+    knowledge=knowledge_base,
+    show_tool_calls=True,
+    markdown=True,
+)
+agent.print_response("How do I make chicken and galangal in coconut milk soup", stream=True)
+```
+
+Install libraries and run the Agent:
+
+```shell
+pip install lancedb tantivy pypdf sqlalchemy
+
+python rag_agent.py
+```
+
+## Agent UI
+
+Phidata provides a beautiful UI for interacting with your agents. Let's take it for a spin, create a file `playground.py`
+
+![agent_playground](https://github.com/user-attachments/assets/546ce6f5-47f0-4c0c-8f06-01d560befdbc)
+
+> [!NOTE]
+> Phidata does not store any data, all agent data is stored locally in a sqlite database.
+
+```python
+from phi.agent import Agent
+from phi.model.openai import OpenAIChat
+from phi.storage.agent.sqlite import SqlAgentStorage
+from phi.tools.duckduckgo import DuckDuckGo
+from phi.tools.yfinance import YFinanceTools
+from phi.playground import Playground, serve_playground_app
+
+web_agent = Agent(
+    name="Web Agent",
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[DuckDuckGo()],
+    instructions=["Always include sources"],
+    storage=SqlAgentStorage(table_name="web_agent", db_file="agents.db"),
+    add_history_to_messages=True,
+    markdown=True,
+)
+
+finance_agent = Agent(
+    name="Finance Agent",
+    model=OpenAIChat(id="gpt-4o"),
+    tools=[YFinanceTools(stock_price=True, analyst_recommendations=True, company_info=True, company_news=True)],
+    instructions=["Use tables to display data"],
+    storage=SqlAgentStorage(table_name="finance_agent", db_file="agents.db"),
+    add_history_to_messages=True,
+    markdown=True,
+)
+
+app = Playground(agents=[finance_agent, web_agent]).get_app()
+
+if __name__ == "__main__":
+    serve_playground_app("playground:app", reload=True)
+```
+
+Authenticate with phidata:
+
+```
+phi auth
+```
+
+> [!NOTE]
+> If `phi auth` fails, you can set the `PHI_API_KEY` environment variable by copying it from [phidata.app](https://www.phidata.app)
+
+Install dependencies and run the Agent Playground:
+
+```
+pip install 'fastapi[standard]' sqlalchemy
+
+python playground.py
+```
+
+- Open the link provided or navigate to `http://phidata.app/playground`
+- Select the `localhost:7777` endpoint and start chatting with your agents!
+
+<video
+  src="https://github.com/user-attachments/assets/3a2ff93c-3d2d-4f1a-9573-eee25542e5c4"
+  style="border-radius: 8px;"
+/>
+
+## Demo Agents
+
+The Agent Playground includes a few demo agents that you can test with. If you have recommendations for other demo agents, please let us know in our [community forum](https://community.phidata.com/).
+
+![demo_agents](https://github.com/user-attachments/assets/329aa15d-83aa-4c6c-88f0-2b0eda257198)
+
+## Monitoring & Debugging
+
+### Monitoring
+
+Phidata comes with built-in monitoring. You can set `monitoring=True` on any agent to track sessions or set `PHI_MONITORING=true` in your environment.
+
+> [!NOTE]
+> Run `phi auth` to authenticate your local account or export the `PHI_API_KEY`
+
+```python
+from phi.agent import Agent
+
+agent = Agent(markdown=True, monitoring=True)
+agent.print_response("Share a 2 sentence horror story")
+```
+
+Run the agent and monitor the results on [phidata.app/sessions](https://www.phidata.app/sessions)
+
+```shell
+# You can also set the environment variable
+# export PHI_MONITORING=true
+
+python monitoring.py
+```
+
+View the agent session on [phidata.app/sessions](https://www.phidata.app/sessions)
+
+![Agent Session](https://github.com/user-attachments/assets/45f3e460-9538-4b1f-96ba-bd46af3c89a8)
+
+### Debugging
+
+Phidata also includes a built-in debugger that will show debug logs in the terminal. You can set `debug_mode=True` on any agent to track sessions or set `PHI_DEBUG=true` in your environment.
+
+```python
+from phi.agent import Agent
+
+agent = Agent(markdown=True, debug_mode=True)
+agent.print_response("Share a 2 sentence horror story")
+```
+
+![debugging](https://github.com/user-attachments/assets/c933c787-4a28-4bff-a664-93b29360d9ea)
+
+## Getting help
 
 - Read the docs at <a href="https://docs.phidata.com" target="_blank" rel="noopener noreferrer">docs.phidata.com</a>
+- Post your questions on the [community forum](https://community.phidata.com/)
 - Chat with us on <a href="https://discord.gg/4MtYHHrgA8" target="_blank" rel="noopener noreferrer">discord</a>
 
-## Examples
+## More examples
 
-- [LLM OS](https://github.com/phidatahq/phidata/tree/main/cookbook/llm_os): Using LLMs as the CPU for an emerging Operating System.
-- [Autonomous RAG](https://github.com/phidatahq/phidata/tree/main/cookbook/examples/auto_rag): Gives LLMs tools to search its knowledge, web or chat history.
-- [Local RAG](https://github.com/phidatahq/phidata/tree/main/cookbook/llms/ollama/rag): Fully local RAG with Llama3 on Ollama and PgVector.
-- [Investment Researcher](https://github.com/phidatahq/phidata/tree/main/cookbook/llms/groq/investment_researcher): Generate investment reports on stocks using Llama3 and Groq.
-- [News Articles](https://github.com/phidatahq/phidata/tree/main/cookbook/llms/groq/news_articles): Write News Articles using Llama3 and Groq.
-- [Video Summaries](https://github.com/phidatahq/phidata/tree/main/cookbook/llms/groq/video_summary): YouTube video summaries using Llama3 and Groq.
-- [Research Assistant](https://github.com/phidatahq/phidata/tree/main/cookbook/llms/groq/research): Write research reports using Llama3 and Groq.
-
-### Assistant that can write and run python code
+### Agent that can write and run python code
 
 <details>
 
 <summary>Show code</summary>
 
-The `PythonAssistant` can achieve tasks by writing and running python code.
+The `PythonAgent` can achieve tasks by writing and running python code.
 
-- Create a file `python_assistant.py`
+- Create a file `python_agent.py`
 
 ```python
-from phi.assistant.python import PythonAssistant
+from phi.agent.python import PythonAgent
+from phi.model.openai import OpenAIChat
 from phi.file.local.csv import CsvFile
 
-python_assistant = PythonAssistant(
+python_agent = PythonAgent(
+    model=OpenAIChat(id="gpt-4o"),
     files=[
         CsvFile(
             path="https://phidata-public.s3.amazonaws.com/demo_data/IMDB-Movie-Data.csv",
             description="Contains information about movies from IMDB.",
         )
     ],
+    markdown=True,
     pip_install=True,
     show_tool_calls=True,
 )
 
-python_assistant.print_response("What is the average rating of movies?", markdown=True)
+python_agent.print_response("What is the average rating of movies?")
 ```
 
-- Install pandas and run the `python_assistant.py`
+- Run the `python_agent.py`
 
 ```shell
-pip install pandas
-
-python python_assistant.py
+python python_agent.py
 ```
 
 </details>
 
-### Assistant that can analyze data using SQL
+### Agent that can analyze data using SQL
 
 <details>
 
 <summary>Show code</summary>
 
-The `DuckDbAssistant` can perform data analysis using SQL.
+The `DuckDbAgent` can perform data analysis using SQL.
 
-- Create a file `data_assistant.py`
+- Create a file `data_analyst.py`
 
 ```python
 import json
-from phi.assistant.duckdb import DuckDbAssistant
+from phi.model.openai import OpenAIChat
+from phi.agent.duckdb import DuckDbAgent
 
-duckdb_assistant = DuckDbAssistant(
-    semantic_model=json.dumps({
-        "tables": [
-            {
-                "name": "movies",
-                "description": "Contains information about movies from IMDB.",
-                "path": "https://phidata-public.s3.amazonaws.com/demo_data/IMDB-Movie-Data.csv",
-            }
-        ]
-    }),
+data_analyst = DuckDbAgent(
+    model=OpenAIChat(model="gpt-4o"),
+    markdown=True,
+    semantic_model=json.dumps(
+        {
+            "tables": [
+                {
+                    "name": "movies",
+                    "description": "Contains information about movies from IMDB.",
+                    "path": "https://phidata-public.s3.amazonaws.com/demo_data/IMDB-Movie-Data.csv",
+                }
+            ]
+        },
+        indent=2,
+    ),
 )
 
-duckdb_assistant.print_response("What is the average rating of movies? Show me the SQL.", markdown=True)
+data_analyst.print_response(
+    "Show me a histogram of ratings. "
+    "Choose an appropriate bucket size but share how you chose it. "
+    "Show me the result as a pretty ascii diagram",
+    stream=True,
+)
 ```
 
-- Install duckdb and run the `data_assistant.py` file
+- Install duckdb and run the `data_analyst.py` file
 
 ```shell
 pip install duckdb
 
-python data_assistant.py
+python data_analyst.py
 ```
 
 </details>
 
-### Assistant that can generate pydantic models
+### Agent that can generate structured outputs
 
 <details>
 
 <summary>Show code</summary>
 
-One of our favorite LLM features is generating structured data (i.e. a pydantic model) from text. Use this feature to extract features, generate movie scripts, produce fake data etc.
+One of our favorite LLM features is generating structured data (i.e. a pydantic model) from text. Use this feature to extract features, generate data etc.
 
-Let's create a Movie Assistant to write a `MovieScript` for us.
-
-- Create a file `movie_assistant.py`
+Let's create a Movie Agent to write a `MovieScript` for us, create a file `structured_output.py`
 
 ```python
 from typing import List
 from pydantic import BaseModel, Field
-from rich.pretty import pprint
-from phi.assistant import Assistant
+from phi.agent import Agent
+from phi.model.openai import OpenAIChat
 
+# Define a Pydantic model to enforce the structure of the output
 class MovieScript(BaseModel):
     setting: str = Field(..., description="Provide a nice setting for a blockbuster movie.")
     ending: str = Field(..., description="Ending of the movie. If not available, provide a happy ending.")
@@ -215,18 +450,28 @@ class MovieScript(BaseModel):
     characters: List[str] = Field(..., description="Name of characters for this movie.")
     storyline: str = Field(..., description="3 sentence storyline for the movie. Make it exciting!")
 
-movie_assistant = Assistant(
-    description="You help write movie scripts.",
-    output_model=MovieScript,
+# Agent that uses JSON mode
+json_mode_agent = Agent(
+    model=OpenAIChat(id="gpt-4o"),
+    description="You write movie scripts.",
+    response_model=MovieScript,
+)
+# Agent that uses structured outputs
+structured_output_agent = Agent(
+    model=OpenAIChat(id="gpt-4o-2024-08-06"),
+    description="You write movie scripts.",
+    response_model=MovieScript,
+    structured_outputs=True,
 )
 
-pprint(movie_assistant.run("New York"))
+json_mode_agent.print_response("New York")
+structured_output_agent.print_response("New York")
 ```
 
-- Run the `movie_assistant.py` file
+- Run the `structured_output.py` file
 
 ```shell
-python movie_assistant.py
+python structured_output.py
 ```
 
 - The output is an object of the `MovieScript` class, here's how it looks:
@@ -244,171 +489,7 @@ MovieScript(
 
 </details>
 
-### PDF Assistant with Knowledge & Storage
-
-<details>
-
-<summary>Show code</summary>
-
-Lets create a PDF Assistant that can answer questions from a PDF. We'll use `PgVector` for knowledge and storage.
-
-**Knowledge Base:** information that the Assistant can search to improve its responses (uses a vector db).
-
-**Storage:** provides long term memory for Assistants (uses a database).
-
-1. Run PgVector
-
-Install [docker desktop](https://docs.docker.com/desktop/install/mac-install/) and run **PgVector** on port **5532** using:
-
-```bash
-docker run -d \
-  -e POSTGRES_DB=ai \
-  -e POSTGRES_USER=ai \
-  -e POSTGRES_PASSWORD=ai \
-  -e PGDATA=/var/lib/postgresql/data/pgdata \
-  -v pgvolume:/var/lib/postgresql/data \
-  -p 5532:5432 \
-  --name pgvector \
-  phidata/pgvector:16
-```
-
-2. Create PDF Assistant
-
-- Create a file `pdf_assistant.py`
-
-```python
-import typer
-from typing import Optional, List
-from phi.assistant import Assistant
-from phi.storage.assistant.postgres import PgAssistantStorage
-from phi.knowledge.pdf import PDFUrlKnowledgeBase
-from phi.vectordb.pgvector import PgVector2
-
-db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
-
-knowledge_base = PDFUrlKnowledgeBase(
-    urls=["https://phi-public.s3.amazonaws.com/recipes/ThaiRecipes.pdf"],
-    vector_db=PgVector2(collection="recipes", db_url=db_url),
-)
-# Comment out after first run
-knowledge_base.load()
-
-storage = PgAssistantStorage(table_name="pdf_assistant", db_url=db_url)
-
-
-def pdf_assistant(new: bool = False, user: str = "user"):
-    run_id: Optional[str] = None
-
-    if not new:
-        existing_run_ids: List[str] = storage.get_all_run_ids(user)
-        if len(existing_run_ids) > 0:
-            run_id = existing_run_ids[0]
-
-    assistant = Assistant(
-        run_id=run_id,
-        user_id=user,
-        knowledge_base=knowledge_base,
-        storage=storage,
-        # Show tool calls in the response
-        show_tool_calls=True,
-        # Enable the assistant to search the knowledge base
-        search_knowledge=True,
-        # Enable the assistant to read the chat history
-        read_chat_history=True,
-    )
-    if run_id is None:
-        run_id = assistant.run_id
-        print(f"Started Run: {run_id}\n")
-    else:
-        print(f"Continuing Run: {run_id}\n")
-
-    # Runs the assistant as a cli app
-    assistant.cli_app(markdown=True)
-
-
-if __name__ == "__main__":
-    typer.run(pdf_assistant)
-```
-
-3. Install libraries
-
-```shell
-pip install -U pgvector pypdf "psycopg[binary]" sqlalchemy
-```
-
-4. Run PDF Assistant
-
-```shell
-python pdf_assistant.py
-```
-
-- Ask a question:
-
-```
-How do I make pad thai?
-```
-
-- See how the Assistant searches the knowledge base and returns a response.
-
-- Message `bye` to exit, start the assistant again using `python pdf_assistant.py` and ask:
-
-```
-What was my last message?
-```
-
-See how the assistant now maintains storage across sessions.
-
-- Run the `pdf_assistant.py` file with the `--new` flag to start a new run.
-
-```shell
-python pdf_assistant.py --new
-```
-
-</details>
-
-### Checkout the [cookbook](https://github.com/phidatahq/phidata/tree/main/cookbook) for more examples.
-
-## Next Steps
-
-1. Read the <a href="https://docs.phidata.com/basics" target="_blank" rel="noopener noreferrer">basics</a> to learn more about phidata.
-2. Read about <a href="https://docs.phidata.com/assistants/introduction" target="_blank" rel="noopener noreferrer">Assistants</a> and how to customize them.
-3. Checkout the <a href="https://docs.phidata.com/examples/cookbook" target="_blank" rel="noopener noreferrer">cookbook</a> for in-depth examples and code.
-
-## Demos
-
-Checkout the following AI Applications built using phidata:
-
-- <a href="https://pdf.aidev.run/" target="_blank" rel="noopener noreferrer">PDF AI</a> that summarizes and answers questions from PDFs.
-- <a href="https://arxiv.aidev.run/" target="_blank" rel="noopener noreferrer">ArXiv AI</a> that answers questions about ArXiv papers using the ArXiv API.
-- <a href="https://hn.aidev.run/" target="_blank" rel="noopener noreferrer">HackerNews AI</a> summarize stories, users and shares what's new on HackerNews.
-
-## Tutorials
-
-### LLM OS with gpt-4o
-
-[![Building the LLM OS with gpt-4o](https://img.youtube.com/vi/6g2KLvwHZlU/0.jpg)](https://www.youtube.com/watch?v=6g2KLvwHZlU "LLM OS")
-
-### Autonomous RAG
-
-[![Autonomous RAG](https://img.youtube.com/vi/fkBkNWivq-s/0.jpg)](https://www.youtube.com/watch?v=fkBkNWivq-s "Autonomous RAG")
-
-### Local RAG with Llama3
-
-[![Local RAG with Llama3](https://img.youtube.com/vi/-8NVHaKKNkM/0.jpg)](https://www.youtube.com/watch?v=-8NVHaKKNkM "Local RAG with Llama3")
-
-### Llama3 Research Assistant powered by Groq
-
-[![Llama3 Research Assistant powered by Groq](https://img.youtube.com/vi/Iv9dewmcFbs/0.jpg)](https://www.youtube.com/watch?v=Iv9dewmcFbs "Llama3 Research Assistant powered by Groq")
-
-## Looking to build an AI product?
-
-We've helped many companies build AI products, the general workflow is:
-
-1. **Build an Assistant** with proprietary data to perform tasks specific to your product.
-2. **Connect your product** to the Assistant via an API.
-3. **Monitor and Improve** your AI product.
-
-We also provide dedicated support and development, [book a call](https://cal.com/phidata/intro) to get started.
+### Check out the [cookbook](https://github.com/phidatahq/phidata/tree/main/cookbook) for more examples.
 
 ## Contributions
 
@@ -419,7 +500,12 @@ We're an open-source project and welcome contributions, please read the [contrib
 - If you have a feature request, please open an issue or make a pull request.
 - If you have ideas on how we can improve, please create a discussion.
 
-## Roadmap
+## Telemetry
 
-Our roadmap is available <a href="https://github.com/orgs/phidatahq/projects/2/views/1" target="_blank" rel="noopener noreferrer">here</a>.
-If you have a feature request, please open an issue/discussion.
+Phidata logs which model an agent used so we can prioritize features for the most popular models.
+
+You can disable this by setting `PHI_TELEMETRY=false` in your environment.
+
+<p align="left">
+  <a href="#top">⬆️ Back to Top</a>
+</p>

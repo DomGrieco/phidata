@@ -3,10 +3,10 @@ from typing import Union, List, Iterator
 
 from phi.document import Document
 from phi.document.reader.docx import DocxReader
-from phi.knowledge.base import AssistantKnowledge
+from phi.knowledge.agent import AgentKnowledge
 
 
-class DocxKnowledgeBase(AssistantKnowledge):
+class DocxKnowledgeBase(AgentKnowledge):
     path: Union[str, Path]
     formats: List[str] = [".doc", ".docx"]
     reader: DocxReader = DocxReader()
@@ -25,6 +25,6 @@ class DocxKnowledgeBase(AssistantKnowledge):
         if _file_path.exists() and _file_path.is_dir():
             for _file in _file_path.glob("**/*"):
                 if _file.suffix in self.formats:
-                    yield self.reader.read(path=_file)
+                    yield self.reader.read(file=_file)
         elif _file_path.exists() and _file_path.is_file() and _file_path.suffix in self.formats:
-            yield self.reader.read(path=_file_path)
+            yield self.reader.read(file=_file_path)

@@ -1,6 +1,7 @@
 import json
 from os import getenv
 from uuid import uuid4
+from pathlib import Path
 from textwrap import dedent
 from datetime import datetime
 from typing import (
@@ -30,7 +31,7 @@ from phi.prompt.template import PromptTemplate
 from phi.storage.assistant import AssistantStorage
 from phi.utils.format_str import remove_indent
 from phi.tools import Tool, Toolkit, Function
-from phi.utils.log import logger, set_log_level_to_debug
+from phi.utils.log import logger, set_log_level_to_debug, set_log_level_to_info
 from phi.utils.message import get_text_from_message
 from phi.utils.merge_dict import merge_dictionaries
 from phi.utils.timer import Timer
@@ -208,6 +209,10 @@ class Assistant(BaseModel):
         if v:
             set_log_level_to_debug()
             logger.debug("Debug logs enabled")
+        else:
+            set_log_level_to_info()
+            logger.info("Debug logs disabled")
+
         return v
 
     @field_validator("run_id", mode="before")
@@ -316,12 +321,12 @@ class Assistant(BaseModel):
         if self.llm.tool_choice is None and self.tool_choice is not None:
             self.llm.tool_choice = self.tool_choice
 
-        # Set tool_call_limit if it is less than the llm tool_call_limit
-        if self.tool_call_limit is not None and self.tool_call_limit < self.llm.function_call_limit:
-            self.llm.function_call_limit = self.tool_call_limit
+        # Set tool_call_limit if set on the assistant
+        if self.tool_call_limit is not None:
+            self.llm.tool_call_limit = self.tool_call_limit
 
         if self.run_id is not None:
-            self.llm.run_id = self.run_id
+            self.llm.session_id = self.run_id
 
     def load_memory(self) -> None:
         if self.memory is not None:
@@ -534,7 +539,9 @@ class Assistant(BaseModel):
 
                     if len(output_model_properties) > 0:
                         json_output_prompt += "\n<json_fields>"
-                        json_output_prompt += f"\n{json.dumps(list(output_model_properties.keys()))}"
+                        json_output_prompt += (
+                            f"\n{json.dumps([key for key in output_model_properties.keys() if key != '$defs'])}"
+                        )
                         json_output_prompt += "\n</json_fields>"
                         json_output_prompt += "\nHere are the properties for each field:"
                         json_output_prompt += "\n<json_field_properties>"
@@ -577,7 +584,8 @@ class Assistant(BaseModel):
             raise Exception("LLM not set")
 
         # -*- Build a list of instructions for the Assistant
-        instructions = self.instructions.copy() if self.instructions is not None else []
+        instructions = self.instructions.copy() if self.instructions is not None else None
+
         # Add default instructions
         if instructions is None:
             instructions = []
@@ -844,7 +852,9 @@ class Assistant(BaseModel):
 
         # -*- Add chat history to the messages list
         if self.add_chat_history_to_messages:
-            llm_messages += self.memory.get_last_n_messages(last_n=self.num_history_messages)
+            llm_messages += self.memory.get_last_n_messages_starting_from_the_user_message(
+                last_n=self.num_history_messages
+            )
 
         # -*- Build the User prompt
         # References to add to the user_prompt if add_references_to_prompt is True
@@ -883,6 +893,10 @@ class Assistant(BaseModel):
             if user_prompt_message is not None:
                 llm_messages += [user_prompt_message]
 
+        # Track the number of messages in the run_messages that SHOULD NOT BE ADDED TO MEMORY
+        # -1 is used to exclude the user message from the count as the user message should be added to memory
+        num_messages_to_skip = len(llm_messages) - 1
+
         # -*- Generate a response from the LLM (includes running function calls)
         llm_response = ""
         self.llm = cast(LLM, self.llm)
@@ -913,8 +927,10 @@ class Assistant(BaseModel):
             self.memory.add_references(references=references)
 
         # Add llm messages to the memory
-        # This includes the raw system messages, user messages, and llm messages
-        self.memory.add_llm_messages(messages=llm_messages)
+        # Only add messages from this particular run to the memory
+        run_messages = llm_messages[num_messages_to_skip:]
+        # Add all messages including and after the user message to the memory
+        self.memory.add_llm_messages(messages=run_messages)
 
         # -*- Update run output
         self.output = llm_response
@@ -928,8 +944,10 @@ class Assistant(BaseModel):
                 fn = self.save_output_to_file.format(
                     name=self.name, run_id=self.run_id, user_id=self.user_id, message=message
                 )
-                with open(fn, "w") as f:
-                    f.write(self.output)
+                fn_path = Path(fn)
+                if not fn_path.parent.exists():
+                    fn_path.parent.mkdir(parents=True, exist_ok=True)
+                fn_path.write_text(self.output)
             except Exception as e:
                 logger.warning(f"Failed to save output to file: {e}")
 
@@ -940,11 +958,13 @@ class Assistant(BaseModel):
             llm_response_type = "json"
         elif self.markdown:
             llm_response_type = "markdown"
+
         functions = {}
         if self.llm is not None and self.llm.functions is not None:
             for _f_name, _func in self.llm.functions.items():
                 if isinstance(_func, Function):
                     functions[_f_name] = _func.to_dict()
+
         event_data = {
             "run_type": "assistant",
             "user_message": message,
@@ -1043,7 +1063,9 @@ class Assistant(BaseModel):
         # -*- Add chat history to the messages list
         if self.add_chat_history_to_messages:
             if self.memory is not None:
-                llm_messages += self.memory.get_last_n_messages(last_n=self.num_history_messages)
+                llm_messages += self.memory.get_last_n_messages_starting_from_the_user_message(
+                    last_n=self.num_history_messages
+                )
 
         # -*- Build the User prompt
         # References to add to the user_prompt if add_references_to_prompt is True
@@ -1082,6 +1104,10 @@ class Assistant(BaseModel):
             if user_prompt_message is not None:
                 llm_messages += [user_prompt_message]
 
+        # Track the number of messages in the run_messages that SHOULD NOT BE ADDED TO MEMORY
+        # -1 is used to exclude the user message from the count as the user message should be added to memory
+        num_messages_to_skip = len(llm_messages) - 1
+
         # -*- Generate a response from the LLM (includes running function calls)
         llm_response = ""
         self.llm = cast(LLM, self.llm)
@@ -1113,8 +1139,10 @@ class Assistant(BaseModel):
             self.memory.add_references(references=references)
 
         # Add llm messages to the memory
-        # This includes the raw system messages, user messages, and llm messages
-        self.memory.add_llm_messages(messages=llm_messages)
+        # Only add messages from this particular run to the memory
+        run_messages = llm_messages[num_messages_to_skip:]
+        # Add all messages including and after the user message to the memory
+        self.memory.add_llm_messages(messages=run_messages)
 
         # -*- Update run output
         self.output = llm_response
@@ -1378,7 +1406,7 @@ class Assistant(BaseModel):
             str: A string indicating the status of the task.
         """
         try:
-            return self.memory.update_memory(input=task, force=True)
+            return self.memory.update_memory(input=task, force=True) or "Successfully updated memory"
         except Exception as e:
             return f"Failed to update memory: {e}"
 

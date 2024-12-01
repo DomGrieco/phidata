@@ -31,12 +31,12 @@ def get_json_schema_for_arg(t: Any) -> Optional[Any]:
     type_origin = get_origin(t)
     # logger.info(f"Type origin: {type_origin}")
     if type_origin is not None:
-        if type_origin == list:
+        if type_origin is list:
             json_schema_for_items = get_json_schema_for_arg(type_args[0])
             json_schema = {"type": "array", "items": json_schema_for_items}
-        elif type_origin == dict:
+        elif type_origin is dict:
             json_schema = {"type": "object", "properties": {}}
-        elif type_origin == Union:
+        elif type_origin is Union:
             json_schema = {"type": [get_json_type_for_py_type(arg.__name__) for arg in type_args]}
     else:
         json_schema = {"type": get_json_type_for_py_type(t.__name__)}
@@ -44,11 +44,19 @@ def get_json_schema_for_arg(t: Any) -> Optional[Any]:
 
 
 def get_json_schema(type_hints: Dict[str, Any]) -> Dict[str, Any]:
-    json_schema: Dict[str, Any] = {"type": "object", "properties": {}}
+    json_schema: Dict[str, Any] = {"type": "object", "properties": {}, "required": []}
     for k, v in type_hints.items():
         # logger.info(f"Parsing arg: {k} | {v}")
         if k == "return":
             continue
+
+        # Check if type is Optional (Union with NoneType)
+        type_origin = get_origin(v)
+        type_args = get_args(v)
+        is_optional = type_origin is Union and len(type_args) == 2 and type(None) in type_args
+        if not is_optional:
+            json_schema["required"].append(k)
+
         arg_json_schema = get_json_schema_for_arg(v)
         if arg_json_schema is not None:
             # logger.info(f"json_schema: {arg_json_schema}")

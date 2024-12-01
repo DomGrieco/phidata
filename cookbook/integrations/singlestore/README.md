@@ -1,4 +1,4 @@
-## SingleStore Assistant
+## SingleStore Agent
 
 1. Create a virtual environment
 
@@ -17,7 +17,7 @@ pip install -U pymysql sqlalchemy pypdf openai phidata
 
 - For SingleStore
 
-> Note: If using a shared tier, please provide a certificate file for SSL connection [Read more](https://docs.singlestore.com/cloud/connect-to-your-workspace/connect-with-mysql/connect-with-mysql-client/connect-to-singlestore-helios-using-tls-ssl/)
+> Note: If using a shared tier, please provide a certificate file for SSL connection [Read more](https://docs.singlestore.com/cloud/connect-to-singlestore/connect-with-mysql/connect-with-mysql-client/connect-to-singlestore-helios-using-tls-ssl/)
 
 ```shell
 export SINGLESTORE_HOST="host"
@@ -34,8 +34,8 @@ export SINGLESTORE_SSL_CA=".certs/singlestore_bundle.pem"
 export OPENAI_API_KEY="sk-..."
 ```
 
-4. Run Assistant
+4. Run Agent
 
 ```shell
-python cookbook/integrations/singlestore/assistant.py
+python cookbook/integrations/singlestore/agent.py
 ```

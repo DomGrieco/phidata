@@ -24,12 +24,13 @@ def authenticate_user() -> None:
     1. Authenticate the user by opening the phidata sign-in url
         and the web-app will post an auth token to a mini http server
         running on the auth_server_port.
-    2. Using the auth_token, authenticate the CLI with api and
-        save the auth_token. This step is handled by authenticate_and_get_user()
+    2. Using the auth_token, authenticate the CLI with the api and get the user.
     3. After the user is authenticated update the PhiCliConfig.
+    4. Save the auth_token locally for future use.
     """
     from phi.api.user import authenticate_and_get_user
     from phi.api.schemas.user import UserSchema
+    from phi.cli.credentials import save_auth_token
     from phi.cli.auth_server import (
         get_port_for_auth_server,
         get_auth_token_from_web_flow,
@@ -44,24 +45,26 @@ def authenticate_user() -> None:
     typer_launch(auth_url)
     print_info("\nWaiting for a response from browser...\n")
 
-    tmp_auth_token = get_auth_token_from_web_flow(auth_server_port)
-    if tmp_auth_token is None:
-        logger.error("Could not authenticate, please try again")
+    auth_token = get_auth_token_from_web_flow(auth_server_port)
+    if auth_token is None:
+        logger.error("Could not authenticate, please set PHI_API_KEY or try again")
         return
 
     phi_config: Optional[PhiCliConfig] = PhiCliConfig.from_saved_config()
     existing_user: Optional[UserSchema] = phi_config.user if phi_config is not None else None
+    # Authenticate the user and claim any workspaces from anon user
     try:
-        user: Optional[UserSchema] = authenticate_and_get_user(
-            tmp_auth_token=tmp_auth_token, existing_user=existing_user
-        )
+        user: Optional[UserSchema] = authenticate_and_get_user(auth_token=auth_token, existing_user=existing_user)
     except Exception as e:
         logger.exception(e)
-        logger.error("Could not authenticate, please try again")
+        logger.error("Could not authenticate, please set PHI_API_KEY or try again")
         return
 
-    if user is None:
-        logger.error("Could not authenticate, please try again")
+    # Save the auth token if user is authenticated
+    if user is not None:
+        save_auth_token(auth_token)
+    else:
+        logger.error("Could not authenticate, please set PHI_API_KEY or try again")
         return
 
     if phi_config is None:
@@ -73,13 +76,13 @@ def authenticate_user() -> None:
     print_info("Welcome {}".format(user.email))
 
 
-def initialize_phi(reset: bool = False, login: bool = False) -> bool:
+def initialize_phi(reset: bool = False, login: bool = False) -> Optional[PhiCliConfig]:
     """Initialize phi on the users machine.
 
     Steps:
     1. Check if PHI_CLI_DIR exists, if not, create it. If reset == True, recreate PHI_CLI_DIR.
     2. Authenticates the user if login == True.
-    3. If PhiCliConfig exists and auth is valid, return True.
+    3. If PhiCliConfig exists and auth is valid, returns PhiCliConfig.
     """
     from phi.utils.filesystem import delete_from_fs
     from phi.api.user import create_anon_user
@@ -124,12 +127,8 @@ def initialize_phi(reset: bool = False, login: bool = False) -> bool:
         if anon_user is not None and phi_config is not None:
             phi_config.user = anon_user
 
-    if phi_config is not None:
-        logger.debug("Phidata initialized")
-        return True
-    else:
-        logger.error("Something went wrong, please try again")
-        return False
+    logger.debug("Phidata initialized")
+    return phi_config
 
 
 def sign_in_using_cli() -> None:

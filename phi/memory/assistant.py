@@ -41,7 +41,7 @@ class AssistantMemory(BaseModel):
 
     def to_dict(self) -> Dict[str, Any]:
         _memory_dict = self.model_dump(
-            exclude_none=True, exclude={"db", "updating", "memories", "classifier", "manager"}
+            exclude_none=True, exclude={"db", "updating", "memories", "classifier", "manager", "retrieval"}
         )
         if self.memories:
             _memory_dict["memories"] = [memory.to_dict() for memory in self.memories]
@@ -74,14 +74,25 @@ class AssistantMemory(BaseModel):
         """
         return [message.model_dump(exclude_none=True) for message in self.chat_history]
 
-    def get_last_n_messages(self, last_n: Optional[int] = None) -> List[Message]:
-        """Returns the last n messages in the chat_history.
+    def get_last_n_messages_starting_from_the_user_message(self, last_n: Optional[int] = None) -> List[Message]:
+        """Returns the last n messages in the llm_messages always starting with the user message greater than or equal to last_n.
 
         :param last_n: The number of messages to return from the end of the conversation.
             If None, returns all messages.
         :return: A list of Messages in the chat_history.
         """
-        return self.chat_history[-last_n:] if last_n else self.chat_history
+        if last_n is None or last_n >= len(self.llm_messages):
+            return self.llm_messages
+
+        # Iterate from the end to find the first user message greater than or equal to last_n
+        last_user_message_ge_n = None
+        for i, message in enumerate(reversed(self.llm_messages)):
+            if message.role == "user" and i >= last_n:
+                last_user_message_ge_n = len(self.llm_messages) - i - 1
+                break
+
+        # If no user message is found, return all messages; otherwise, return from the found index
+        return self.llm_messages[last_user_message_ge_n:] if last_user_message_ge_n is not None else self.llm_messages
 
     def get_llm_messages(self) -> List[Dict[str, Any]]:
         """Returns the llm_messages as a list of dictionaries."""
@@ -90,12 +101,12 @@ class AssistantMemory(BaseModel):
     def get_formatted_chat_history(self, num_messages: Optional[int] = None) -> str:
         """Returns the chat_history as a formatted string."""
 
-        messages = self.get_last_n_messages(num_messages)
+        messages = self.get_last_n_messages_starting_from_the_user_message(num_messages)
         if len(messages) == 0:
             return ""
 
         history = ""
-        for message in self.get_last_n_messages(num_messages):
+        for message in self.get_last_n_messages_starting_from_the_user_message(num_messages):
             if message.role == "user":
                 history += "\n---\n"
             history += f"{message.role.upper()}: {message.content}\n"
@@ -185,7 +196,7 @@ class AssistantMemory(BaseModel):
             return True
         return False
 
-    def update_memory(self, input: str, force: bool = False) -> str:
+    def update_memory(self, input: str, force: bool = False) -> Optional[str]:
         """Creates a memory from a message and adds it to the memory db."""
 
         if input is None or not isinstance(input, str):
@@ -220,3 +231,11 @@ class AssistantMemory(BaseModel):
         memory_str += "\n</memory_from_previous_interactions>"
 
         return memory_str
+
+    def clear(self) -> None:
+        """Clears the assistant memory"""
+        self.chat_history = []
+        self.llm_messages = []
+        self.references = []
+        self.memories = None
+        logger.debug("Assistant Memory cleared")

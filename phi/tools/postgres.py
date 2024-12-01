@@ -3,7 +3,9 @@ from typing import Optional, Dict, Any
 try:
     import psycopg2
 except ImportError:
-    raise ImportError("`psycopg2` not installed. Please install using `pip install psycopg2`.")
+    raise ImportError(
+        "`psycopg2` not installed. Please install using `pip install psycopg2`. If you face issues, try `pip install psycopg2-binary`."
+    )
 
 from phi.tools import Toolkit
 from phi.utils.log import logger
@@ -97,6 +99,7 @@ class PostgresTools(Toolkit):
         including min, max, avg, std and approx_unique.
 
         :param table: Table to summarize
+        :param table_schema: Schema of the table
         :return: Summary of the table
         """
         stmt = f"""WITH column_stats AS (

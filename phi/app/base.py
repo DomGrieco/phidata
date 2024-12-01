@@ -1,15 +1,15 @@
 from typing import Optional, Dict, Any, Union, List
 
 from pydantic import field_validator, Field
-from pydantic_core.core_schema import FieldValidationInfo
+from pydantic_core.core_schema import ValidationInfo
 
-from phi.base import PhiBase
+from phi.infra.base import InfraBase
 from phi.app.context import ContainerContext
 from phi.resource.base import ResourceBase
 from phi.utils.log import logger
 
 
-class AppBase(PhiBase):
+class AppBase(InfraBase):
     # -*- App Name (required)
     name: str
 
@@ -64,7 +64,7 @@ class AppBase(PhiBase):
     # -*- App specific args. Not to be set by the user.
     # Container Environment that can be set by subclasses
     # which is used as a starting point for building the container_env
-    # Any variables set in container_env will be overriden by values
+    # Any variables set in container_env will be overridden by values
     # in the env_vars dict or env_file
     container_env: Optional[Dict[str, Any]] = None
     # Variable used to cache the container context
@@ -74,14 +74,14 @@ class AppBase(PhiBase):
     cached_resources: Optional[List[Any]] = None
 
     @field_validator("container_port", mode="before")
-    def set_container_port(cls, v, info: FieldValidationInfo):
+    def set_container_port(cls, v, info: ValidationInfo):
         port_number = info.data.get("port_number")
         if v is None and port_number is not None:
             v = port_number
         return v
 
     @field_validator("host_port", mode="before")
-    def set_host_port(cls, v, info: FieldValidationInfo):
+    def set_host_port(cls, v, info: ValidationInfo):
         port_number = info.data.get("port_number")
         if v is None and port_number is not None:
             v = port_number

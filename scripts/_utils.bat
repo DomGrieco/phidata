@@ -1,4 +1,7 @@
 @echo off
+call :%~1 "%~2"
+goto :eof
+
 :: Collection of helper functions to import in other scripts
 
 :: Function to pause the script until a key is pressed
@@ -9,7 +12,7 @@ goto :eof
 
 :: Function to print a horizontal line
 :print_horizontal_line
-echo ------------------------------------------------------------ 
+echo ------------------------------------------------------------
 goto :eof
 
 :: Function to print a heading with horizontal lines
@@ -20,6 +23,6 @@ call :print_horizontal_line
 goto :eof
 
 :: Function to print a status message
-:print_status
+:print_info
 echo -*- %~1
 goto :eof
