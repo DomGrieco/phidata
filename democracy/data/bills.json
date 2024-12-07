@@ -1,0 +1,770 @@
+{
+  "bills": [
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Presented to President."
+      },
+      "number": "3960",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "A bill to amend title 35, United States Code, to provide a good faith exception to the imposition of fines for false assertions and certifications, and for other purposes.",
+      "type": "S",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/s/3960?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Placed on the Union Calendar, Calendar No. 674."
+      },
+      "number": "8150",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "REVAMP Act",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/8150?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "actionTime": "10:21:46",
+        "text": "Motion to reconsider laid on the table Agreed to without objection."
+      },
+      "number": "5349",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Crucial Communism Teaching Act",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/5349?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "House Committee on Natural Resources Granted an extension for further consideration ending not later than Dec. 19, 2024."
+      },
+      "number": "7779",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Good Samaritan Remediation of Abandoned Hardrock Mines Act of 2024",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/7779?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the Committee on Ways and Means, and in addition to the Committee on Veterans' Affairs, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+      },
+      "number": "10328",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend the Internal Revenue Code of 1986 to allow taxpayers to designate overpayments of tax as contributions and to make additional contributions to the Homeless Veterans Assistance Fund, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10328?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Veterans' Affairs."
+      },
+      "number": "10327",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend title 38, United States Code, to authorize veterans who are entitled to educational assistance under the Post-9/11 Educational Assistance Program of the Department of Veterans Affairs to use such entitlement to participate in a career transition internship program for veterans.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10327?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on the Judiciary."
+      },
+      "number": "10329",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To provide that it is unlawful to knowingly distribute private intimate visual depictions with reckless disregard for the individual's lack of consent to the distribution, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10329?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Financial Services."
+      },
+      "number": "10323",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To modify the prohibition on financing in the Export-Import Bank of the United States, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10323?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Oversight and Accountability."
+      },
+      "number": "10324",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend title 5, United States Code, to address telework for Federal employees, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10324?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Transportation and Infrastructure."
+      },
+      "number": "10318",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend title 49, United States Code, to authorize the use of physical or digital copies of certain certificates for certain Federal Aviation Administration inspections, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10318?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Homeland Security."
+      },
+      "number": "10322",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To improve the effectiveness of body armor issued to female agents and officers of the Department of Homeland Security, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10322?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Energy and Commerce."
+      },
+      "number": "10317",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend title XIX of the Social Security Act to establish a community engagement requirement for certain individuals under the Medicaid program.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10317?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Science, Space, and Technology."
+      },
+      "number": "10320",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend title 51, United States Code, to establish a Commercial Space Transportation Administration, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10320?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Oversight and Accountability."
+      },
+      "number": "10319",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To require annual reports on bonuses awarded to career Senior Executive Service employees, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10319?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on the Judiciary."
+      },
+      "number": "10326",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend title 36, United States Code, to reform certain proceedings before the United States Center for SafeSport.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10326?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the Committee on Natural Resources, and in addition to the Committee on Agriculture, for a period to be subsequently determined by the Speaker, in each case for consideration of such provisions as fall within the jurisdiction of the committee concerned."
+      },
+      "number": "10325",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To require the Secretary of the Interior to carry out a program for post-disaster reforestation and restoration Program, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10325?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Foreign Affairs."
+      },
+      "number": "1610",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Commemorating the 40th anniversary of the LA84 Foundation and of the 1984 Summer Olympic Games in Los Angeles, California.",
+      "type": "HRES",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hres/1610?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-06",
+        "text": "Referred to the House Committee on Energy and Commerce."
+      },
+      "number": "10321",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend the definition of \"production facility\" in the Atomic Energy Act of 1954 to exclude an equipment or device capable of reprocessing spent nuclear fuel in a manner that does not separate plutonium from other transuranic elements, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/10321?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "8932",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "FAFSA Deadline Act",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/8932?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "7764",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Commission to Study the Potential Transfer of the Weitzman National Museum of American Jewish History to the Smithsonian Institution Act",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/7764?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "7438",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "FIFA World Cup 2026 Commemorative Coin Act",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/7438?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "7218",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "BOLD Infrastructure for Alzheimer's Reauthorization Act of 2024",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/7218?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "5799",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "James R. Dominguez Memorial Act of 2023",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/5799?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "5536",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Grant Transparency Act of 2023",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/5536?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "5302",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Michel O. Maceda Memorial Act",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/5302?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Presented to President."
+      },
+      "number": "2950",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Coastal Habitat Conservation Act of 2023",
+      "type": "HR",
+      "updateDate": "2024-12-05",
+      "updateDateIncludingText": "2024-12-05",
+      "url": "https://api.congress.gov/v3/bill/118/hr/2950?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Placed on the Union Calendar, Calendar No. 673."
+      },
+      "number": "1165",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Data Privacy Act of 2023",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/1165?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Placed on the Union Calendar, Calendar No. 672."
+      },
+      "number": "3284",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Providers and Payers COMPETE Act",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/3284?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "actionTime": "18:14:00",
+        "text": "ASSUMING FIRST SPONSORSHIP - Mr. Burlison asked unanimous consent that he may hereafter be considered as the first sponsor of H.R. 374, a bill originally introduced by Representative Gaetz, for the purpose of adding cosponsors and requesting reprintings pursuant to clause 7 of rule XII. Agreed to without objection."
+      },
+      "number": "374",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Abolish the ATF Act",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/374?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "actionTime": "18:13:04",
+        "text": "Without objection, the motion to reconsider is laid upon the table."
+      },
+      "number": "1609",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Directing the Committee on Ethics to preserve and release records of the Committee's review of the alleged misconduct of Matthew Louis Gaetz II of Florida while serving as a Member of the House of Representatives.",
+      "type": "HRES",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hres/1609?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "actionTime": "18:01:27",
+        "text": "Without objection, the motion to reconsider is laid upon the table."
+      },
+      "number": "1608",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Directing the Committee on Ethics of the House of Representatives to release to the public the committee's report on its investigation into allegations against former Representative Matt Gaetz.",
+      "type": "HRES",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hres/1608?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "actionTime": "17:49:58",
+        "text": "Motion to reconsider laid on the table Agreed to without objection."
+      },
+      "number": "7198",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Prove It Act of 2024",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/7198?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "actionTime": "17:25:26",
+        "text": "Motion to reconsider laid on the table Agreed to without objection."
+      },
+      "number": "9600",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To designate the facility of the United States Postal Service located at 119 Main Street in Plains, Georgia, as the \"Jimmy and Rosalynn Carter Post Office\".",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/9600?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "actionTime": "17:21:13",
+        "text": "Motion to reconsider laid on the table Agreed to without objection."
+      },
+      "number": "9598",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Office of National Drug Control Policy Reauthorization Act of 2024",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/9598?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "House Committee on the Judiciary Granted an extension for further consideration ending not later than Dec. 19, 2024."
+      },
+      "number": "4406",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "DHS Basic Training Accreditation Improvement Act of 2023",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/4406?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "actionTime": "17:16:26",
+        "text": "Motion to reconsider laid on the table Agreed to without objection."
+      },
+      "number": "709",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "Federal Agency Performance Act of 2024",
+      "type": "S",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/s/709?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Placed on the Union Calendar, Calendar No. 671."
+      },
+      "number": "9749",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "To amend the Homeland Security Act of 2002 to abolish the reorganization authority of the Department of Homeland Security, and for other purposes.",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/9749?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Read twice and referred to the Committee on Finance."
+      },
+      "number": "5451",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "A bill to enhance the economic and national security of the United States by securing a reliable supply of critical minerals and rare earth elements through trade agreements and strategic partnerships.",
+      "type": "S",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/s/5451?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Placed on the Union Calendar, Calendar No. 670."
+      },
+      "number": "6435",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "MALDEN Act",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/6435?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Read twice and referred to the Committee on the Judiciary."
+      },
+      "number": "5450",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "A bill to amend title 18, United States Code, to permit a licensed importer, licensed manufacturer, or licensed dealer to notify chief law enforcement officers electronically, and for other purposes.",
+      "type": "S",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/s/5450?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Resolution agreed to in Senate without amendment and with a preamble by Unanimous Consent. (consideration: CR S6855; text: 11/21/2024 CR S6728)"
+      },
+      "number": "908",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "A resolution expressing support for the goals of Stomach Cancer Awareness Month.",
+      "type": "SRES",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/sres/908?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Read twice and referred to the Committee on Banking, Housing, and Urban Affairs."
+      },
+      "number": "5449",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "A bill to create an Office of Cybersecurity at the Federal Trade Commission for supervision of data security at consumer reporting agencies, to require the promulgation of regulations establishing standards for effective cybersecurity at consumer reporting agencies, to impose penalties on credit reporting agencies for cybersecurity breaches that put sensitive consumer data at risk, and for other purposes.",
+      "type": "S",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/s/5449?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Placed on the Union Calendar, Calendar No. 669."
+      },
+      "number": "8530",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Improving Federal Building Security Act of 2024",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/8530?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Passed Senate with an amendment by Unanimous Consent. (consideration: CR S6853-6855; text: CR S6853-6855)"
+      },
+      "number": "3606",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "National Earthquake Hazards Reduction Program Reauthorization Act of 2024",
+      "type": "S",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/s/3606?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Placed on the Union Calendar, Calendar No. 668."
+      },
+      "number": "9121",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Fire Management Assistance Grants for Tribal Governments Act",
+      "type": "HR",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/hr/9121?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Passed Senate with an amendment by Unanimous Consent. (consideration: CR S6851-6852; text: CR S6851-6852)"
+      },
+      "number": "1868",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "Secure Adjacent Federal Property Act of 2023",
+      "type": "S",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/s/1868?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Passed Senate with an amendment by Unanimous Consent. (text: CR S6853)"
+      },
+      "number": "4212",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "American Music Tourism Act of 2024",
+      "type": "S",
+      "updateDate": "2024-12-07",
+      "updateDateIncludingText": "2024-12-07",
+      "url": "https://api.congress.gov/v3/bill/118/s/4212?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Received in the Senate."
+      },
+      "number": "9566",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "SHARE IT Act",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/9566?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Received in the Senate."
+      },
+      "number": "8219",
+      "originChamber": "House",
+      "originChamberCode": "H",
+      "title": "Lahaina National Heritage Area Study Act",
+      "type": "HR",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/hr/8219?format=json"
+    },
+    {
+      "congress": 118,
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Read twice and referred to the Committee on Health, Education, Labor, and Pensions."
+      },
+      "number": "5448",
+      "originChamber": "Senate",
+      "originChamberCode": "S",
+      "title": "A bill to clarify the time period for registering health care apprenticeships under the Act of August 16, 1937 (commonly known as the \"National Apprenticeship Act\") and require the digitization of apprenticeship agreement forms under such Act, and for other purposes.",
+      "type": "S",
+      "updateDate": "2024-12-06",
+      "updateDateIncludingText": "2024-12-06",
+      "url": "https://api.congress.gov/v3/bill/118/s/5448?format=json"
+    }
+  ],
+  "pagination": {
+    "count": 410226,
+    "next": "https://api.congress.gov/v3/bill?offset=50&limit=50&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  }
+}

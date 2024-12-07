@@ -1,7 +1,7 @@
 from typing import Optional, List
 from datetime import datetime
 from phi.agent import Agent
-from phi.knowledge.pdf import PDFUrlKnowledgeBase
+from phi.knowledge.pdf import PDFUrlKnowledgeBase, PDFKnowledgeBase
 from phi.knowledge.website import WebsiteKnowledgeBase 
 from phi.storage.agent.postgres import PgAgentStorage
 from phi.vectordb.pgvector import PgVector, SearchType
@@ -57,43 +57,83 @@ knowledge_base = CombinedKnowledgeBase(
     )
 )
 
-# Storage for persistent memory
-storage = PgAgentStorage(
-    table_name="congress_agent_sessions",
-    db_url=db_url
+# Create Constitutional Knowledge Base
+constitutional_knowledge = PDFKnowledgeBase(
+    urls=[
+        "https://www.archives.gov/founding-docs/constitution-transcript",
+        "https://guides.loc.gov/federalist-papers/full-text",
+        "https://www.archives.gov/founding-docs/bill-of-rights-transcript"
+    ],
+    vector_db=PgVector(
+        table_name="constitutional_docs",
+        db_url=db_url,
+        search_type=SearchType.hybrid
+    ),
 )
 
-# Create the Congress Analysis Agent
-congress_agent = Agent(
-    name="Congress Analyst",
-    description="I analyze congressional bills and activities to make them easily understandable.",
+# Modern Congress Analyst
+congress_analyst = Agent(
+    name="Modern Congress Analyst",
+    role="Analyzes current congressional activities and provides objective summaries",
     knowledge=knowledge_base,
-    storage=storage,
     tools=[DuckDuckGo(), Newspaper4k()],
     instructions=[
-        "You are an expert at analyzing US Congressional activities and bills.",
-        "For each bill, provide a clear summary in plain language that anyone can understand.",
-        "Include key points, potential impact, and current status.",
-        "When relevant, provide context from historical bills and voting patterns.",
-        "Always cite sources and maintain factual accuracy.",
+        "Analyze current congressional bills and activities objectively",
+        "Focus on summarizing key points, impact, and status",
+        "Provide clear explanations without historical interpretation",
+    ],
+)
+
+# Constitutional Perspective Analyst
+founding_father_analyst = Agent(
+    name="Constitutional Perspective Analyst",
+    role="Provides historical constitutional perspective on modern legislation",
+    knowledge=constitutional_knowledge,
+    instructions=[
+        "You are an expert on the US Constitution, Federalist Papers, and founding principles",
+        "Analyze modern legislation through the lens of the founding fathers",
+        "Consider constitutional principles, federalism, and original intent",
+        "Reference specific writings, debates, or principles from the founding era",
+        "Be direct about potential constitutional concerns or alignments",
+    ],
+)
+
+# Team Leader Agent
+congress_analysis_team = Agent(
+    name="Congressional Analysis Team",
+    team=[congress_analyst, founding_father_analyst],
+    storage=storage,
+    instructions=[
+        "First, have the Modern Congress Analyst summarize the current legislation",
+        "Then, ask the Constitutional Perspective Analyst to analyze it from a founding fathers' perspective",
+        "Highlight any interesting contrasts between modern and founding era perspectives",
+        "Focus on constitutional principles, federalism, and separation of powers",
     ],
     show_tool_calls=True,
     read_chat_history=True,
     add_datetime_to_instructions=True,
 )
 
-def analyze_recent_bills():
-    """Analyze recent congressional bills"""
-    # Load knowledge bases if needed
+# Storage for persistent memory
+storage = PgAgentStorage(
+    table_name="congress_agent_sessions",
+    db_url=db_url
+)
+
+def analyze_bills_with_historical_perspective():
+    """Analyze bills with both modern and historical constitutional perspectives"""
+    # Load knowledge bases
     knowledge_base.load(recreate=False)
+    constitutional_knowledge.load(recreate=False)
     
-    # Get analysis from agent
-    response = congress_agent.run(
-        "Analyze the most recent significant bills introduced in Congress. "
-        "Focus on their potential impact on citizens and current status."
+    # Get team analysis
+    response = congress_analysis_team.run(
+        "Analyze the most recent significant bills in Congress, "
+        "comparing modern implementation with founding constitutional principles. "
+        "What would the founding fathers think about these changes?"
     )
     return response
 
 if __name__ == "__main__":
-    analysis = analyze_recent_bills()
+    analysis = analyze_bills_with_historical_perspective()
     print(analysis.content) 

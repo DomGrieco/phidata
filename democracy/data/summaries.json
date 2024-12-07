@@ -1,0 +1,91 @@
+{
+  "pagination": {
+    "count": 4
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  },
+  "summaries": [
+    {
+      "actionDate": "2023-12-19",
+      "actionDesc": "Passed Senate",
+      "bill": {
+        "congress": 118,
+        "number": "1478",
+        "originChamber": "Senate",
+        "originChamberCode": "S",
+        "title": "A bill to designate United States Route 20 in the States of Oregon, Idaho, Montana, Wyoming, Nebraska, Iowa, Illinois, Indiana, Ohio, Pennsylvania, New York, and Massachusetts as the \"National Medal of Honor Highway\", and for other purposes.",
+        "type": "S",
+        "updateDateIncludingText": "2024-12-07",
+        "url": "https://api.congress.gov/v3/bill/118/s/1478?format=json"
+      },
+      "currentChamber": "Senate",
+      "currentChamberCode": "S",
+      "lastSummaryUpdateDate": "2024-12-07T01:08:52Z",
+      "text": "<p>This bill designates U.S. Route 20 in the states of Oregon, Idaho, Montana, Wyoming, Nebraska, Iowa, Illinois, Indiana, Ohio, Pennsylvania, New York, and Massachusetts as the National Medal of Honor Highway.</p>",
+      "updateDate": "2024-12-07T01:08:56Z",
+      "versionCode": "55"
+    },
+    {
+      "actionDate": "2024-06-14",
+      "actionDesc": "Introduced in House",
+      "bill": {
+        "congress": 118,
+        "number": "8753",
+        "originChamber": "House",
+        "originChamberCode": "H",
+        "title": "To direct the United States Postal Service to designate single, unique ZIP Codes for certain communities, and for other purposes.",
+        "type": "HR",
+        "updateDateIncludingText": "2024-12-07",
+        "url": "https://api.congress.gov/v3/bill/118/hr/8753?format=json"
+      },
+      "currentChamber": "House",
+      "currentChamberCode": "H",
+      "lastSummaryUpdateDate": "2024-12-07T01:07:15Z",
+      "text": "<p>This bill requires the U.S Postal Service to designate a single, unique ZIP Code for each of the following 31 communities:</p><ul><li>Eastvale, California;</li><li>Castle Pines, Colorado;</li><li>Centennial, Colorado;</li><li>Lone Tree, Colorado;</li><li>Silver Cliff, Colorado;</li><li>Superior, Colorado;</li><li>Goose Creek, Connecticut;</li><li>Scotland, Connecticut;</li><li>Estero, Florida;</li><li>Ft. Myers, Florida;</li><li>Hollywood, Florida;</li><li>Miami Lakes, Florida;</li><li>Ocoee, Florida;</li><li>Oakland Park, Florida;</li><li>The Villages, Florida</li><li>Burr Ridge, Illinois;</li><li>Urbandale, Iowa;</li><li>Carmel, Indiana;</li><li>Swanzey, New Hampshire;</li><li>Kinnelon, New Jersey;</li><li>Flanders, New York;</li><li>Glendale, New York;</li><li>Riverside, New York;</li><li>Northampton, New York;</li><li>Sargent, Texas;</li><li>Fairlawn, Virginia;</li><li>Caledonia, Wisconsin;</li><li>Franklin, Wisconsin;</li><li>Mount Pleasant, Wisconsin;</li><li>Somers, Wisconsin; and</li><li>Mills, Wyoming.</li></ul>",
+      "updateDate": "2024-12-07T01:07:20Z",
+      "versionCode": "00"
+    },
+    {
+      "actionDate": "2024-07-08",
+      "actionDesc": "Passed Senate",
+      "bill": {
+        "congress": 118,
+        "number": "736",
+        "originChamber": "Senate",
+        "originChamberCode": "S",
+        "title": "A resolution recognizing the importance of trademarks in the economy and the role of trademarks in protecting consumer safety, by designating the month of July as \"National Anti-Counterfeiting and Consumer Education and Awareness Month\".",
+        "type": "SRES",
+        "updateDateIncludingText": "2024-12-06",
+        "url": "https://api.congress.gov/v3/bill/118/sres/736?format=json"
+      },
+      "currentChamber": "Senate",
+      "currentChamberCode": "S",
+      "lastSummaryUpdateDate": "2024-12-06T23:01:42Z",
+      "text": "<p>This resolution designates July 2024&nbsp;as National Anti-Counterfeiting and Consumer Education and Awareness Month.</p>",
+      "updateDate": "2024-12-06T23:02:11Z",
+      "versionCode": "55"
+    },
+    {
+      "actionDate": "2024-06-28",
+      "actionDesc": "Introduced in House",
+      "bill": {
+        "congress": 118,
+        "number": "1333",
+        "originChamber": "House",
+        "originChamberCode": "H",
+        "title": "Recognizing the significance of National Caribbean American Heritage Month.",
+        "type": "HRES",
+        "updateDateIncludingText": "2024-12-06",
+        "url": "https://api.congress.gov/v3/bill/118/hres/1333?format=json"
+      },
+      "currentChamber": "House",
+      "currentChamberCode": "H",
+      "lastSummaryUpdateDate": "2024-12-06T22:59:21Z",
+      "text": "<p>This resolution expresses support for the goals and ideals of Caribbean American Heritage Month. </p>The resolution also affirms that (1) the contributions of Caribbean Americans are a significant part of the history, progress, and heritage of the United States; and (2) the ethnic and racial diversity of the United States enriches and strengthens the nation.",
+      "updateDate": "2024-12-06T22:59:34Z",
+      "versionCode": "00"
+    }
+  ]
+}
