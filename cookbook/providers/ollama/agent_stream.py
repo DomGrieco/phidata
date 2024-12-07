@@ -19,4 +19,4 @@ agent = Agent(
 #     print(chunk.content)
 
 # Print the response in the terminal
-agent.print_response("What is the stock price of NVDA and TSLA", stream=True)
+agent.print_response("What is the stock price of NVDA", stream=True)
