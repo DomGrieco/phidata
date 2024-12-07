@@ -47,3 +47,6 @@ agents.db
 data.db
 
 .ipynb_checkpoints
+/eruv
+windows-readme.md
+startenv.md
