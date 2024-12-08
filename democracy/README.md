@@ -29,3 +29,8 @@ This agent system combines modern congressional data with historical constitutio
 ## Setup
 
 1. Install dependencies: 
+```
+
+## Interactive Usage
+
+Run the interactive analysis tool:

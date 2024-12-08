@@ -156,9 +156,11 @@ congress_analyst = Agent(
     knowledge=knowledge_base,
     tools=[DuckDuckGo(), Newspaper4k()],
     instructions=[
-        "Analyze current congressional bills and activities objectively",
-        "Focus on summarizing key points, impact, and status",
-        "Provide clear explanations without historical interpretation",
+        "Use ONLY the data from our Congress.gov knowledge base for current information",
+        "When analyzing recent bills, focus on actual enactment dates and current status",
+        "Provide specific bill numbers, dates, and exact titles from our knowledge base",
+        "Do not rely on training data for current legislative information",
+        "Focus on summarizing key points, impact, and status from our current data",
     ],
 )
 
@@ -194,7 +196,7 @@ congress_analysis_team = Agent(
 )
 
 # Configuration flags
-TEST_KNOWLEDGE_ONLY = True  # Set to False to run full agent analysis
+TEST_KNOWLEDGE_ONLY = False  # Set to False to run full agent analysis
 
 def load_knowledge_bases(force_reload=False):
     """Load all knowledge bases"""
