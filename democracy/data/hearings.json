@@ -1,0 +1,47 @@
+{
+  "hearings": [
+    {
+      "chamber": "House",
+      "congress": 118,
+      "jacketNumber": 57258,
+      "updateDate": "2024-12-08T00:51:16Z",
+      "url": "https://api.congress.gov/v3/hearing/118/house/57258"
+    },
+    {
+      "chamber": "House",
+      "congress": 118,
+      "jacketNumber": 53870,
+      "updateDate": "2024-12-07T06:21:12Z",
+      "url": "https://api.congress.gov/v3/hearing/118/house/53870"
+    },
+    {
+      "chamber": "House",
+      "congress": 118,
+      "jacketNumber": 53871,
+      "updateDate": "2024-12-07T06:21:12Z",
+      "url": "https://api.congress.gov/v3/hearing/118/house/53871"
+    },
+    {
+      "chamber": "House",
+      "congress": 118,
+      "jacketNumber": 55913,
+      "updateDate": "2024-12-07T06:21:12Z",
+      "url": "https://api.congress.gov/v3/hearing/118/house/55913"
+    },
+    {
+      "chamber": "House",
+      "congress": 118,
+      "jacketNumber": 53199,
+      "updateDate": "2024-12-07T06:21:11Z",
+      "url": "https://api.congress.gov/v3/hearing/118/house/53199"
+    }
+  ],
+  "pagination": {
+    "count": 33538,
+    "next": "https://api.congress.gov/v3/hearing?offset=5&limit=5&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  }
+}

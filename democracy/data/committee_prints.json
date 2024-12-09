@@ -1,0 +1,47 @@
+{
+  "committeePrints": [
+    {
+      "chamber": "House",
+      "congress": 94,
+      "jacketNumber": 54857,
+      "updateDate": "2023-10-13 15:31:34+00:00",
+      "url": "https://api.congress.gov/v3/committee-print/94/house/54857?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 94,
+      "jacketNumber": 77245,
+      "updateDate": "2020-05-01 18:32:46+00:00",
+      "url": "https://api.congress.gov/v3/committee-print/94/house/77245?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 101,
+      "jacketNumber": 48719,
+      "updateDate": "2020-05-01 18:34:20+00:00",
+      "url": "https://api.congress.gov/v3/committee-print/101/house/48719?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 102,
+      "jacketNumber": 58561,
+      "updateDate": "2023-12-04 23:00:42+00:00",
+      "url": "https://api.congress.gov/v3/committee-print/102/house/58561?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 102,
+      "jacketNumber": 48719,
+      "updateDate": "2020-05-01 18:35:07+00:00",
+      "url": "https://api.congress.gov/v3/committee-print/102/house/48719?format=json"
+    }
+  ],
+  "pagination": {
+    "count": 1786,
+    "next": "https://api.congress.gov/v3/committee-print?offset=5&limit=5&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  }
+}

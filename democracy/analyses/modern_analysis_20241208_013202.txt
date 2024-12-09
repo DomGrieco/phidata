@@ -1,0 +1,11 @@
+Query: Whats the last change related to online censorship 
+
+The most recent related bill that touches on issues concerning online activities and potentially censorship was House Bill 10329: "To provide that it is unlawful to knowingly distribute private intimate visual depictions with reckless disregard for the individual's lack of consent to the distribution, and for other purposes." 
+
+- **Congress**: 118th
+- **Latest Action**: Referred to the House Committee on the Judiciary on December 6, 2024.
+- **Bill Number**: HR 10329
+- **Origin Chamber**: House
+- **Bill URL**: [HR 10329 Details](https://api.congress.gov/v3/bill/118/hr/10329?format=json)
+
+This bill potentially involves online censorship as it aims to prevent the unauthorized or non-consensual distribution of private images, which is often associated with discussions on digital privacy and censorship.

@@ -1,0 +1,29 @@
+Query: Any change that has large impact on the population
+
+**Query for Congressional Analysis:**
+
+**Intent:** Identify and assess legislative changes with substantial impacts on the population.
+
+**Specific Details:**
+
+1. **Scope of Change:**
+   - Define what constitutes a "large impact" in terms of population size, demographic affected, economic impact, or social change.
+   - Examine recent legislative changes (within the last 1-2 legislative sessions) for analysis.
+
+2. **Types of Legislation:**
+   - Focus on major categories such as healthcare, taxation, education, labor laws, environmental regulation, and social welfare programs.
+
+3. **Impact Analysis:**
+   - Evaluate both direct and indirect impacts on different segments of the population.
+   - Consider short-term and long-term consequences.
+
+4. **Data and Metrics:**
+   - Request quantitative data such as economic indicators, demographic statistics, and qualitative assessments like public opinion or expert analyses.
+
+5. **Examples:**
+   - Recent legislative changes that resulted in significant shifts in policy or resource allocation that affected a large portion of the population.
+
+6. **Comparative Studies:**
+   - Reference similar past legislation to provide context or contrast impacts.
+
+**Objective:** To produce a detailed report identifying which legislative changes have had or are projected to have substantial impacts on the U.S. population, backed by data and analysis.

@@ -1,0 +1,119 @@
+{
+  "members": [
+    {
+      "bioguideId": "S001192",
+      "depiction": {
+        "attribution": "Image courtesy of the Member",
+        "imageUrl": "https://www.congress.gov/img/member/s001192_200.jpg"
+      },
+      "district": 2,
+      "name": "Stewart, Chris",
+      "partyName": "Republican",
+      "state": "Utah",
+      "terms": {
+        "item": [
+          {
+            "chamber": "House of Representatives",
+            "endYear": 2023,
+            "startYear": 2013
+          }
+        ]
+      },
+      "updateDate": "2024-12-06T20:39:35Z",
+      "url": "https://api.congress.gov/v3/member/S001192?format=json"
+    },
+    {
+      "bioguideId": "C001067",
+      "depiction": {
+        "attribution": "Image courtesy of the Member",
+        "imageUrl": "https://www.congress.gov/img/member/674dfc6b5c48ff736e6e1762_200.jpg"
+      },
+      "district": 9,
+      "name": "Clarke, Yvette D.",
+      "partyName": "Democratic",
+      "state": "New York",
+      "terms": {
+        "item": [
+          {
+            "chamber": "House of Representatives",
+            "startYear": 2007
+          }
+        ]
+      },
+      "updateDate": "2024-12-04T13:08:28Z",
+      "url": "https://api.congress.gov/v3/member/C001067?format=json"
+    },
+    {
+      "bioguideId": "W000829",
+      "depiction": {
+        "attribution": "Image courtesy of the Member",
+        "imageUrl": "https://www.congress.gov/img/member/6734b6724c72e343a6aff9e6_200.jpg"
+      },
+      "district": 8,
+      "name": "Wied, Tony",
+      "partyName": "Republican",
+      "state": "Wisconsin",
+      "terms": {
+        "item": [
+          {
+            "chamber": "House of Representatives",
+            "startYear": 2024
+          }
+        ]
+      },
+      "updateDate": "2024-11-20T19:56:11Z",
+      "url": "https://api.congress.gov/v3/member/W000829?format=json"
+    },
+    {
+      "bioguideId": "L000605",
+      "depiction": {
+        "attribution": "Image courtesy of the Member",
+        "imageUrl": "https://www.congress.gov/img/member/6734b97f4c72e343a6aff9f4_200.jpg"
+      },
+      "district": 18,
+      "name": "Lee Carter, Erica",
+      "partyName": "Democratic",
+      "state": "Texas",
+      "terms": {
+        "item": [
+          {
+            "chamber": "House of Representatives",
+            "startYear": 2024
+          }
+        ]
+      },
+      "updateDate": "2024-11-20T19:54:42Z",
+      "url": "https://api.congress.gov/v3/member/L000605?format=json"
+    },
+    {
+      "bioguideId": "P000121",
+      "depiction": {
+        "attribution": "Collection of the U.S. House of Representatives",
+        "imageUrl": "https://www.congress.gov/img/member/p000121_200.jpg"
+      },
+      "district": 38,
+      "name": "Patterson, Jerry M.",
+      "partyName": "Democratic",
+      "state": "California",
+      "terms": {
+        "item": [
+          {
+            "chamber": "House of Representatives",
+            "endYear": 1985,
+            "startYear": 1975
+          }
+        ]
+      },
+      "updateDate": "2024-11-18T19:38:01Z",
+      "url": "https://api.congress.gov/v3/member/P000121?format=json"
+    }
+  ],
+  "pagination": {
+    "count": 2526,
+    "next": "https://api.congress.gov/v3/member?offset=5&limit=5&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  }
+}

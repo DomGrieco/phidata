@@ -1,0 +1,18 @@
+{
+  "citation": "PN2016",
+  "congress": 118,
+  "description": "Tiffany Rene Johnson, of Georgia, to be United States District Judge for the Northern District of Georgia, vice Steve C. Jones, retiring.",
+  "latestAction": {
+    "actionDate": "2024-12-05",
+    "text": "By unanimous consent agreement, debate and vote 12/9/2024."
+  },
+  "nominationType": {
+    "isCivilian": true
+  },
+  "number": 2016,
+  "organization": "The Judiciary",
+  "partNumber": "00",
+  "receivedDate": "2024-07-31",
+  "updateDate": "2024-12-06T05:14:14Z",
+  "url": "https://api.congress.gov/v3/nomination/118/2016?format=json"
+}

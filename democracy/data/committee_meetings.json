@@ -1,0 +1,47 @@
+{
+  "committeeMeetings": [
+    {
+      "chamber": "House",
+      "congress": 115,
+      "eventId": "105496",
+      "updateDate": "2019-01-17T16:04:06Z",
+      "url": "https://api.congress.gov/v3/committee-meeting/115/house/105496?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 115,
+      "eventId": "105497",
+      "updateDate": "2019-01-17T16:04:10Z",
+      "url": "https://api.congress.gov/v3/committee-meeting/115/house/105497?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 115,
+      "eventId": "105498",
+      "updateDate": "2019-01-17T16:04:16Z",
+      "url": "https://api.congress.gov/v3/committee-meeting/115/house/105498?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 115,
+      "eventId": "105500",
+      "updateDate": "2019-01-17T16:04:17Z",
+      "url": "https://api.congress.gov/v3/committee-meeting/115/house/105500?format=json"
+    },
+    {
+      "chamber": "House",
+      "congress": 115,
+      "eventId": "105501",
+      "updateDate": "2019-01-17T16:04:18Z",
+      "url": "https://api.congress.gov/v3/committee-meeting/115/house/105501?format=json"
+    }
+  ],
+  "pagination": {
+    "count": 15355,
+    "next": "https://api.congress.gov/v3/committee-meeting?offset=5&limit=5&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  }
+}

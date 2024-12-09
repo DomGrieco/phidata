@@ -1,0 +1,15 @@
+{
+  "congress": 118,
+  "latestAction": {
+    "actionDate": "2024-12-06",
+    "text": "Presented to President."
+  },
+  "number": "3960",
+  "originChamber": "Senate",
+  "originChamberCode": "S",
+  "title": "A bill to amend title 35, United States Code, to provide a good faith exception to the imposition of fines for false assertions and certifications, and for other purposes.",
+  "type": "S",
+  "updateDate": "2024-12-06",
+  "updateDateIncludingText": "2024-12-06",
+  "url": "https://api.congress.gov/v3/bill/118/s/3960?format=json"
+}

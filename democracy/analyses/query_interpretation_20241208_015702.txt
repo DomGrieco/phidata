@@ -1,0 +1,22 @@
+Query: What about changes related to guns
+
+**Query for Analysis Team:**
+
+**Main Intent:** Investigate changes in legislation related to firearms.
+
+**Detailed Structure:**
+1. **Legislative Changes Overview:**
+   - Identify recent amendments, introductions, repeals, or votes on bills related to firearms in Congress.
+2. **Specific Areas of Legislation:**
+   - Regulations concerning the sale, purchase, and ownership of firearms.
+   - Background checks and waiting periods for firearm purchases.
+   - Restrictions on specific types of firearms or accessories (e.g., assault weapons, high-capacity magazines).
+   - Changes in federal funding or grants for gun-related law enforcement programs.
+   - Measures addressing gun trafficking and illegal gun sales.
+3. **Legislative Sponsors and Supporters:**
+   - Identify key congressional sponsors or supporters of significant gun-related bills.
+4. **Current Impact and Public Response:**
+   - What are the proposed impacts on public safety and Second Amendment rights?
+   - Summarize public and interest group reactions to recent legislative activities.
+5. **Comparison with Previous Legislation:**
+   - Highlight any significant shifts in policy compared to previous congressional terms.

@@ -1,0 +1,10 @@
+{
+  "chamber": "House",
+  "citation": "H. Rept. 16-67",
+  "congress": 16,
+  "number": 67,
+  "part": 1,
+  "type": "HRPT",
+  "updateDate": "2024-05-30 02:21:14+00:00",
+  "url": "https://api.congress.gov/v3/committee-report/16/HRPT/67?format=json"
+}

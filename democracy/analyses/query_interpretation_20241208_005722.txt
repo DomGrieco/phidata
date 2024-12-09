@@ -1,0 +1,13 @@
+Query: What was the last bill to come into law?
+
+**Query for Congressional Analysis**
+
+- **Main Intent:** Identify the most recent bill that has been enacted into law.
+  
+- **Specific Details Required:**
+  - Determine and provide the title and number of the last bill signed into law.
+  - Include the date when the bill was signed by the President.
+  - Provide a brief summary of the bill's main provisions and objectives.
+  - Note any significant amendments or debates associated with the bill prior to it becoming law.
+  - Identify the primary sponsors and key supporters or opponents within Congress.
+  - Provide context if possible, regarding the impact or significance of the bill.

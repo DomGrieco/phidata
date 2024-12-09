@@ -1,0 +1,18 @@
+{
+  "citation": "PN1981",
+  "congress": 118,
+  "description": "David Samuel Johnson, of Virginia, to be Inspector General for Tax Administration, Department of the Treasury, vice J. Russell George, deceased.",
+  "latestAction": {
+    "actionDate": "2024-12-05",
+    "text": "Referred sequentially to the Committee on Homeland Security and Governmental Affairs for 20 calendar days under authority of the order of the Senate of 01/07/2009."
+  },
+  "nominationType": {
+    "isCivilian": true
+  },
+  "number": 1981,
+  "organization": "Department of the Treasury",
+  "partNumber": "00",
+  "receivedDate": "2024-07-23",
+  "updateDate": "2024-12-06T05:14:14Z",
+  "url": "https://api.congress.gov/v3/nomination/118/1981?format=json"
+}

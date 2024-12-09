@@ -1,0 +1,52 @@
+{
+  "committees": [
+    {
+      "chamber": "House",
+      "committeeTypeCode": "Other",
+      "name": "Bicentenary Committee",
+      "systemCode": "hcza00",
+      "updateDate": "2017-07-19T14:06:31Z",
+      "url": "https://api.congress.gov/v3/committee/house/hcza00?format=json"
+    },
+    {
+      "chamber": "House",
+      "committeeTypeCode": "Standing",
+      "name": "Energy (Ad Hoc) Committee",
+      "systemCode": "hhah00",
+      "updateDate": "2017-07-19T14:06:31Z",
+      "url": "https://api.congress.gov/v3/committee/house/hhah00?format=json"
+    },
+    {
+      "chamber": "House",
+      "committeeTypeCode": "Select",
+      "name": "U.S. Role in Iranian Arms Committee",
+      "systemCode": "hlbz00",
+      "updateDate": "2017-07-19T14:06:31Z",
+      "url": "https://api.congress.gov/v3/committee/house/hlbz00?format=json"
+    },
+    {
+      "chamber": "House",
+      "committeeTypeCode": "Select",
+      "name": "Children, Youth, and Families (Select) Committee",
+      "systemCode": "hlcf00",
+      "updateDate": "2020-04-23T15:52:32Z",
+      "url": "https://api.congress.gov/v3/committee/house/hlcf00?format=json"
+    },
+    {
+      "chamber": "House",
+      "committeeTypeCode": "Select",
+      "name": "Select Committee on the Climate Crisis",
+      "systemCode": "hlcn00",
+      "updateDate": "2023-01-03T18:06:31Z",
+      "url": "https://api.congress.gov/v3/committee/house/hlcn00?format=json"
+    }
+  ],
+  "pagination": {
+    "count": 810,
+    "next": "https://api.congress.gov/v3/committee?offset=5&limit=5&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  }
+}

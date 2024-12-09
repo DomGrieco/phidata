@@ -1,0 +1,15 @@
+{
+  "congress": 118,
+  "latestAction": {
+    "actionDate": "2024-12-06",
+    "text": "Referred to the House Committee on the Judiciary."
+  },
+  "number": "10329",
+  "originChamber": "House",
+  "originChamberCode": "H",
+  "title": "To provide that it is unlawful to knowingly distribute private intimate visual depictions with reckless disregard for the individual's lack of consent to the distribution, and for other purposes.",
+  "type": "HR",
+  "updateDate": "2024-12-07",
+  "updateDateIncludingText": "2024-12-07",
+  "url": "https://api.congress.gov/v3/bill/118/hr/10329?format=json"
+}

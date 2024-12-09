@@ -1,0 +1,15 @@
+Query: Any change that has large impact on the population
+
+Here are some recent legislative activities from the 118th Congress that could have a significant impact on the population:
+
+1. **HR 10329**: Titled "To provide that it is unlawful to knowingly distribute private intimate visual depictions with reckless disregard for the individual's lack of consent to the distribution, and for other purposes." This bill aims to address issues related to privacy and consent concerning intimate visual depictions. It was referred to the House Committee on the Judiciary on December 6, 2024. [More Details](https://api.congress.gov/v3/bill/118/hr/10329?format=json)
+
+2. **HR 8150 - REVAMP Act**: This bill has been placed on the Union Calendar as of December 6, 2024. While detailed impacts are yet to be specified, being on the calendar indicates further action is anticipated. [More Details](https://api.congress.gov/v3/bill/118/hr/8150?format=json)
+
+3. **HR 7779 - Good Samaritan Remediation of Abandoned Hardrock Mines Act of 2024**: This bill aims to encourage remediation of abandoned hardrock mines, potentially improving environmental conditions and safety. The House Committee on Natural Resources granted an extension for consideration, ending no later than December 19, 2024. [More Details](https://api.congress.gov/v3/bill/118/hr/7779?format=json)
+
+4. **HR 10327**: A bill to amend title 38 of the United States Code to allow veterans entitled to educational assistance under the Post-9/11 Educational Assistance Program to participate in career transition internship programs. It was referred to the House Committee on Veterans' Affairs on December 6, 2024. [More Details](https://api.congress.gov/v3/bill/118/hr/10327?format=json)
+
+5. **HR 10328**: This bill proposes amendments to the Internal Revenue Code to allow taxpayers to designate overpayments as contributions and to make additional contributions to the Homeless Veterans Assistance Fund. It was referred to the Committee on Ways and Means and the Committee on Veterans' Affairs. [More Details](https://api.congress.gov/v3/bill/118/hr/10328?format=json)
+
+These bills address issues ranging from privacy and environmental safety to veterans' benefits, reflecting a wide range of impacts on different segments of the population.

@@ -1,0 +1,17 @@
+Query: Whats the last change related to online censorship?
+
+**Query for Analysis:**
+
+1. **Main Intent:** Request for information regarding recent legislative changes concerning online censorship.
+
+2. **Specific Details:**
+   - Identify the most recent piece of legislation or amendment related to online censorship.
+   - Provide details of the change, including the date it was enacted or proposed.
+   - Outline key components, objectives, or provisions of the legislation.
+   - Highlight any debates, supporters, or opposition related to this change.
+   - Include potential or expected impacts on individuals, companies, and platforms affected by this legislation.
+   - Reference any previous legislation it may amend or repeal.
+
+3. **Contextual Information:**
+   - Consider both federal and state levels of legislation.
+   - Include any relevant executive orders if applicable.

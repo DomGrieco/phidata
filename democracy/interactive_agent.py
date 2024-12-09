@@ -1,74 +1,33 @@
-from historical_agent import (
-    congress_analyst, 
-    founding_father_analyst, 
-    congress_analysis_team,
-    load_knowledge_bases
-)
+from workflow import CongressAnalysisWorkflow
+from phi.memory.db.postgres import PgMemoryDb
 from phi.assistant import Assistant
-from phi.utils.pprint import pprint_run_response
-from pathlib import Path
+from phi.memory import AgentMemory
+import logging
 
-# Create query interpreter assistant
-query_interpreter = Assistant(
-    name="Query Interpreter",
-    instructions=[
-        "You analyze user queries about congressional legislation and format them for detailed analysis.",
-        "Identify the main intent and structure the query appropriately.",
-        "Format queries to be specific and detailed for the analysis team."
-    ],
-    debug_mode=True
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Add database configuration
+db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
+
+# Create memory database with proper configuration
+agent_memory = AgentMemory(
+    db=PgMemoryDb(
+        table_name="agent_memory",
+        db_url=db_url
+    ),
+    create_user_memories=True,
+    create_session_summary=True
 )
 
-def preprocess_query(query: str) -> str:
-    """Use LLM to interpret and format the query appropriately"""
-    try:
-        response = query_interpreter.run(f"""
-        Analyze this user query about congressional legislation: "{query}"
-        
-        Important: Use ONLY the data from our Congress.gov knowledge base, which contains current 2024 data.
-        Do not rely on training data or historical knowledge.
-        
-        1. Identify the main intent (e.g., recent laws, specific bill analysis, topic analysis)
-        2. Format an appropriate query for the analysis team
-        
-        For example:
-        If asking about recent laws, format like this:
-        ```
-        Using our Congress.gov knowledge base:
-        1. Find the most recently enacted bills from our current data
-        2. For each enacted bill:
-           - List the bill number and exact title
-           - Show the exact date enacted
-           - Include the latest action status
-           - Summarize key provisions
-           - Explain current impact
-        Sort by most recent enactment date.
-        ```
-        
-        Return only the formatted query as a clear, specific request.
-        """, stream=False)
-        
-        return str(response)
-    except Exception as e:
-        print(f"Error preprocessing query: {str(e)}")
-        return query
+# Create workflow
+analysis_workflow = CongressAnalysisWorkflow()
 
 def interactive_analysis():
-    """Interactive CLI for natural language congressional analysis"""
+    """Interactive CLI with workflow management"""
     print("\nWelcome to the Congressional Analysis System")
     print("------------------------------------------")
-    print("Ask any question about Congress, bills, or constitutional implications.")
-    print("Examples:")
-    print("- What bills recently became law?")
-    print("- Tell me about recent gun control legislation")
-    print("- What would the founding fathers think about H.R. 1234?")
-    
-    # Ensure knowledge bases are loaded
-    load_knowledge_bases(force_reload=False)
-    
-    # Create analyses directory if it doesn't exist
-    analyses_dir = Path("democracy/analyses")
-    analyses_dir.mkdir(exist_ok=True, parents=True)
     
     while True:
         query = input("\nWhat would you like to know? (or 'exit' to quit): ")
@@ -77,31 +36,30 @@ def interactive_analysis():
             break
             
         try:
-            # Preprocess query using LLM
-            formatted_query = preprocess_query(query)
-            print("\nInterpreted Query:", formatted_query)
+            logger.info(f"Processing query: {query}")
             
-            # Run analysis with formatted query and handle streaming
-            print("\nAnalysis Results:")
-            print("----------------")
-            analysis_content = ""
-            for chunk in congress_analysis_team.run(formatted_query, stream=True):
-                if hasattr(chunk, 'content') and chunk.content:
-                    analysis_content += chunk.content
-                    print(chunk.content, end="", flush=True)
-            
-            # Option to save
-            if analysis_content:
-                save = input("\n\nWould you like to save this analysis? (y/n): ")
-                if save.lower() == 'y':
-                    filename = input("Enter filename to save as: ")
-                    with open(analyses_dir / f"{filename}.txt", "w") as f:
-                        f.write(f"Original Query: {query}\nInterpreted Query: {formatted_query}\n\nAnalysis:\n{analysis_content}")
-                    print(f"Analysis saved to analyses/{filename}.txt")
-                
+            # Run analysis workflow and consume the generator
+            for event in analysis_workflow.run(query):
+                if hasattr(event, 'content') and event.content:
+                    print("\nAnalysis Result:")
+                    print("-----------------")
+                    print(event.content)
+                    logger.info("Generated content successfully")
+                    
+                    # Save to memory
+                    try:
+                        run = {
+                            "input": query,
+                            "output": event.content
+                        }
+                        agent_memory.add_run(run)
+                        logger.info("Successfully saved to database")
+                    except Exception as db_error:
+                        logger.error(f"Failed to save to database: {str(db_error)}")
+                        
         except Exception as e:
+            logger.error(f"Error processing query: {str(e)}")
             print(f"\nError processing query: {str(e)}")
-            print("Please try rephrasing your question.")
 
 if __name__ == "__main__":
     interactive_analysis() 

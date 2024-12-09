@@ -1,0 +1,16 @@
+{
+  "congress": 118,
+  "latestAction": {
+    "actionDate": "2024-12-06",
+    "actionTime": "10:21:46",
+    "text": "Motion to reconsider laid on the table Agreed to without objection."
+  },
+  "number": "5349",
+  "originChamber": "House",
+  "originChamberCode": "H",
+  "title": "Crucial Communism Teaching Act",
+  "type": "HR",
+  "updateDate": "2024-12-07",
+  "updateDateIncludingText": "2024-12-07",
+  "url": "https://api.congress.gov/v3/bill/118/hr/5349?format=json"
+}

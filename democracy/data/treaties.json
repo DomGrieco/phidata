@@ -1,0 +1,67 @@
+{
+  "pagination": {
+    "count": 783,
+    "next": "https://api.congress.gov/v3/treaty?offset=5&limit=5&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  },
+  "treaties": [
+    {
+      "congressConsidered": 98,
+      "congressReceived": 98,
+      "number": 26,
+      "parts": {},
+      "suffix": "",
+      "topic": "Commercial",
+      "transmittedDate": "1984-06-11T00:00:00Z",
+      "updateDate": "2024-09-17T17:55:26Z",
+      "url": "https://api.congress.gov/v3/treaty/98/26?format=json"
+    },
+    {
+      "congressConsidered": 98,
+      "congressReceived": 98,
+      "number": 20,
+      "parts": {},
+      "suffix": "",
+      "topic": "Extradition and Criminal Assistance",
+      "transmittedDate": "1984-04-18T00:00:00Z",
+      "updateDate": "2024-09-17T17:54:10Z",
+      "url": "https://api.congress.gov/v3/treaty/98/20?format=json"
+    },
+    {
+      "congressConsidered": null,
+      "congressReceived": 117,
+      "number": 7,
+      "parts": {},
+      "suffix": "",
+      "topic": null,
+      "transmittedDate": null,
+      "updateDate": "2024-04-17T14:13:22Z",
+      "url": "https://api.congress.gov/v3/treaty/117/7?format=json"
+    },
+    {
+      "congressConsidered": 115,
+      "congressReceived": 115,
+      "number": 1,
+      "parts": {},
+      "suffix": "",
+      "topic": "Extradition",
+      "transmittedDate": "2017-01-17T00:00:00Z",
+      "updateDate": "2024-03-08T09:49:30Z",
+      "url": "https://api.congress.gov/v3/treaty/115/1?format=json"
+    },
+    {
+      "congressConsidered": 115,
+      "congressReceived": 115,
+      "number": 2,
+      "parts": {},
+      "suffix": "",
+      "topic": "Extradition",
+      "transmittedDate": "2017-01-17T00:00:00Z",
+      "updateDate": "2024-03-08T09:49:30Z",
+      "url": "https://api.congress.gov/v3/treaty/115/2?format=json"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+Query: What was the last bill to come into law?
+
+The most recent bill presented to the President for enactment is Senate Bill 3960 of the 118th Congress. As of December 6, 2024, it has been presented to the President. The bill aims to amend title 35, United States Code, to provide a good faith exception to the imposition of fines for false assertions and certifications, among other purposes. For more details, you can view the bill's information [here](https://api.congress.gov/v3/bill/118/s/3960?format=json).

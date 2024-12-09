@@ -1,0 +1,15 @@
+{
+  "congress": 118,
+  "latestAction": {
+    "actionDate": "2024-12-06",
+    "text": "House Committee on Natural Resources Granted an extension for further consideration ending not later than Dec. 19, 2024."
+  },
+  "number": "7779",
+  "originChamber": "House",
+  "originChamberCode": "H",
+  "title": "Good Samaritan Remediation of Abandoned Hardrock Mines Act of 2024",
+  "type": "HR",
+  "updateDate": "2024-12-07",
+  "updateDateIncludingText": "2024-12-07",
+  "url": "https://api.congress.gov/v3/bill/118/hr/7779?format=json"
+}

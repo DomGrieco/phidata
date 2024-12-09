@@ -1,0 +1,102 @@
+{
+  "nominations": [
+    {
+      "citation": "PN1981",
+      "congress": 118,
+      "description": "David Samuel Johnson, of Virginia, to be Inspector General for Tax Administration, Department of the Treasury, vice J. Russell George, deceased.",
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Referred sequentially to the Committee on Homeland Security and Governmental Affairs for 20 calendar days under authority of the order of the Senate of 01/07/2009."
+      },
+      "nominationType": {
+        "isCivilian": true
+      },
+      "number": 1981,
+      "organization": "Department of the Treasury",
+      "partNumber": "00",
+      "receivedDate": "2024-07-23",
+      "updateDate": "2024-12-06T05:14:14Z",
+      "url": "https://api.congress.gov/v3/nomination/118/1981?format=json"
+    },
+    {
+      "citation": "PN2016",
+      "congress": 118,
+      "description": "Tiffany Rene Johnson, of Georgia, to be United States District Judge for the Northern District of Georgia, vice Steve C. Jones, retiring.",
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "By unanimous consent agreement, debate and vote 12/9/2024."
+      },
+      "nominationType": {
+        "isCivilian": true
+      },
+      "number": 2016,
+      "organization": "The Judiciary",
+      "partNumber": "00",
+      "receivedDate": "2024-07-31",
+      "updateDate": "2024-12-06T05:14:14Z",
+      "url": "https://api.congress.gov/v3/nomination/118/2016?format=json"
+    },
+    {
+      "citation": "PN2017",
+      "congress": 118,
+      "description": "Keli Marie Neary, of Pennsylvania, to be United States District Judge for the Middle District of Pennsylvania, vice Christopher C. Conner, retiring.",
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Cloture invoked in Senate by Yea-Nay Vote. 48 - 45. Record Vote Number: 316."
+      },
+      "nominationType": {
+        "isCivilian": true
+      },
+      "number": 2017,
+      "organization": "The Judiciary",
+      "partNumber": "00",
+      "receivedDate": "2024-07-31",
+      "updateDate": "2024-12-06T05:14:14Z",
+      "url": "https://api.congress.gov/v3/nomination/118/2017?format=json"
+    },
+    {
+      "citation": "PN2040",
+      "congress": 118,
+      "description": "Sarah Morgan Davenport, of New Mexico, to be United States District Judge for the District of New Mexico, vice William P. Johnson, retiring.",
+      "latestAction": {
+        "actionDate": "2024-12-05",
+        "text": "Confirmed by the Senate by Yea-Nay Vote. 52 - 45. Record Vote Number: 314."
+      },
+      "nominationType": {
+        "isCivilian": true
+      },
+      "number": 2040,
+      "organization": "The Judiciary",
+      "partNumber": "00",
+      "receivedDate": "2024-09-09",
+      "updateDate": "2024-12-06T05:14:13Z",
+      "url": "https://api.congress.gov/v3/nomination/118/2040?format=json"
+    },
+    {
+      "citation": "PN2015",
+      "congress": 118,
+      "description": "Anthony J. Brindisi, of New York, to be United States District Judge for the Northern District of New York, vice David N. Hurd, retiring.",
+      "latestAction": {
+        "actionDate": "2024-12-04",
+        "text": "Confirmed by the Senate by Yea-Nay Vote. 50 - 49. Record Vote Number: 310."
+      },
+      "nominationType": {
+        "isCivilian": true
+      },
+      "number": 2015,
+      "organization": "The Judiciary",
+      "partNumber": "00",
+      "receivedDate": "2024-07-31",
+      "updateDate": "2024-12-05T05:14:15Z",
+      "url": "https://api.congress.gov/v3/nomination/118/2015?format=json"
+    }
+  ],
+  "pagination": {
+    "count": 43260,
+    "next": "https://api.congress.gov/v3/nomination?offset=5&limit=5&format=json"
+  },
+  "request": {
+    "contentType": "application/json",
+    "format": "json"
+  }
+}

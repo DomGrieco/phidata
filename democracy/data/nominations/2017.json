@@ -1,0 +1,18 @@
+{
+  "citation": "PN2017",
+  "congress": 118,
+  "description": "Keli Marie Neary, of Pennsylvania, to be United States District Judge for the Middle District of Pennsylvania, vice Christopher C. Conner, retiring.",
+  "latestAction": {
+    "actionDate": "2024-12-05",
+    "text": "Cloture invoked in Senate by Yea-Nay Vote. 48 - 45. Record Vote Number: 316."
+  },
+  "nominationType": {
+    "isCivilian": true
+  },
+  "number": 2017,
+  "organization": "The Judiciary",
+  "partNumber": "00",
+  "receivedDate": "2024-07-31",
+  "updateDate": "2024-12-06T05:14:14Z",
+  "url": "https://api.congress.gov/v3/nomination/118/2017?format=json"
+}

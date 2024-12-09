@@ -17,6 +17,8 @@ from pathlib import Path
 from phi.document.reader.website import WebsiteReader
 from phi.document.base import Document
 from bs4 import BeautifulSoup
+from hashlib import sha256
+import psycopg2
 
 # Load environment variables
 load_dotenv()
@@ -31,42 +33,69 @@ db_url = "postgresql+psycopg://ai:ai@localhost:5532/ai"
 data_dir = Path("democracy/data")
 data_dir.mkdir(exist_ok=True, parents=True)
 
-def fetch_and_save_congress_data():
+def fetch_and_save_congress_data(force_update=False):
     """Fetch data from Congress.gov API and save locally"""
-    urls = {
-        "bills": f"https://api.congress.gov/v3/bill?api_key={CONGRESS_API_KEY}&limit=50&offset=0&format=json",
-        "summaries": f"https://api.congress.gov/v3/summaries?api_key={CONGRESS_API_KEY}&limit=20&format=json",
-        "records": f"https://api.congress.gov/v3/congressional-record?api_key={CONGRESS_API_KEY}&limit=20&format=json",
-        "reports": f"https://api.congress.gov/v3/committee-report?api_key={CONGRESS_API_KEY}&limit=20&format=json"
-    }
     
+    # Create subdirectories for each data type
+    for dir_name in ["bills", "records", "reports", "members", "committees", 
+                    "meetings", "hearings", "nominations"]:
+        data_dir_path = data_dir / dir_name
+        data_dir_path.mkdir(exist_ok=True, parents=True)
+
+    urls = {
+        "bills": f"https://api.congress.gov/v3/bill?api_key={CONGRESS_API_KEY}&limit=10&format=json",
+        "records": f"https://api.congress.gov/v3/congressional-record?api_key={CONGRESS_API_KEY}&limit=5&format=json",
+        "reports": f"https://api.congress.gov/v3/committee-report?api_key={CONGRESS_API_KEY}&limit=5&format=json",
+        "members": f"https://api.congress.gov/v3/member?api_key={CONGRESS_API_KEY}&limit=5&format=json",
+        "committees": f"https://api.congress.gov/v3/committee?api_key={CONGRESS_API_KEY}&limit=5&format=json",
+        "meetings": f"https://api.congress.gov/v3/committee-meeting?api_key={CONGRESS_API_KEY}&limit=5&format=json",
+        "hearings": f"https://api.congress.gov/v3/hearing?api_key={CONGRESS_API_KEY}&limit=5&format=json",
+        "nominations": f"https://api.congress.gov/v3/nomination?api_key={CONGRESS_API_KEY}&limit=5&format=json",
+    }
+
     for name, url in urls.items():
+        print(f"\nFetching {name} data...")
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            print(f"\nFetched {name} data:")
-            print(f"Response structure: {list(data.keys())}")
-            with open(data_dir / f"{name}.json", "w") as f:
-                json.dump(data, f, indent=2)
+            
+            # Save individual items
+            items = data.get(name, [])  # Get list of items based on endpoint name
+            for item in items:
+                # Create unique ID based on available fields
+                item_id = item.get('number', '') or item.get('id', '') or item.get('citation', '')
+                if item_id:
+                    file_path = data_dir / name / f"{item_id}.json"
+                    with open(file_path, "w") as f:
+                        json.dump(item, f, indent=2)
+                    print(f"✓ Saved {name} item: {item_id}")
+        else:
+            print(f"✗ Error fetching {name}: {response.status_code}")
 
-# Update knowledge bases to use simpler configuration
+# Update knowledge bases to use directories
 congress_docs = JSONKnowledgeBase(
-    path=str(data_dir / "bills.json"),
+    path=str(data_dir / "bills"),  # Point to bills directory
     vector_db=PgVector(
         table_name="congress_docs",
         db_url=db_url,
         search_type=SearchType.hybrid
-    )
+    ),
+    text_splitter=1000,
+    # Use bill number as document ID
+    pre_process_fn=lambda x: {
+        'content': x,
+        'document_id': x.get('number') if isinstance(x, dict) else None
+    }
 )
 
-# Create separate knowledge bases for records and reports
 records_knowledge = JSONKnowledgeBase(
-    path=str(data_dir / "records.json"),
+    path=str(data_dir / "records"),  # Point to records directory
     vector_db=PgVector(
         table_name="congress_records",
         db_url=db_url,
         search_type=SearchType.hybrid
-    )
+    ),
+    text_splitter=1000
 )
 
 reports_knowledge = JSONKnowledgeBase(
@@ -75,12 +104,72 @@ reports_knowledge = JSONKnowledgeBase(
         table_name="congress_reports",
         db_url=db_url,
         search_type=SearchType.hybrid
-    )
+    ),
+    text_splitter=2000
 )
 
-# Combined knowledge base
+members_knowledge = JSONKnowledgeBase(
+    path=str(data_dir / "members.json"),
+    vector_db=PgVector(
+        table_name="congress_members",
+        db_url=db_url,
+        search_type=SearchType.hybrid
+    ),
+    text_splitter=2000
+)
+
+committees_knowledge = JSONKnowledgeBase(
+    path=str(data_dir / "committees.json"),
+    vector_db=PgVector(
+        table_name="congress_committees",
+        db_url=db_url,
+        search_type=SearchType.hybrid
+    ),
+    text_splitter=2000
+)
+
+meetings_knowledge = JSONKnowledgeBase(
+    path=str(data_dir / "committee_meetings.json"),
+    vector_db=PgVector(
+        table_name="committee_meetings",
+        db_url=db_url,
+        search_type=SearchType.hybrid
+    ),
+    text_splitter=2000
+)
+
+hearings_knowledge = JSONKnowledgeBase(
+    path=str(data_dir / "hearings.json"),
+    vector_db=PgVector(
+        table_name="congress_hearings",
+        db_url=db_url,
+        search_type=SearchType.hybrid
+    ),
+    text_splitter=2000
+)
+
+nominations_knowledge = JSONKnowledgeBase(
+    path=str(data_dir / "nominations.json"),
+    vector_db=PgVector(
+        table_name="congress_nominations",
+        db_url=db_url,
+        search_type=SearchType.hybrid
+    ),
+    text_splitter=2000
+)
+
+# Update combined knowledge base
 knowledge_base = CombinedKnowledgeBase(
-    sources=[congress_docs, records_knowledge, reports_knowledge],  # Include all sources
+    sources=[
+        congress_docs,
+        records_knowledge, 
+        reports_knowledge,
+        members_knowledge,
+        committees_knowledge,
+        meetings_knowledge,
+        hearings_knowledge,
+        nominations_knowledge
+    ],
     vector_db=PgVector(
         table_name="congress_knowledge",
         db_url=db_url
@@ -135,12 +224,13 @@ constitutional_knowledge = WebsiteKnowledgeBase(
         "https://www.archives.gov/founding-docs/bill-of-rights-transcript"
     ],
     max_links=0,
-    reader=ConstitutionalReader(),  # Switch back to custom reader
+    reader=ConstitutionalReader(),
     vector_db=PgVector(
         table_name="constitutional_docs",
         db_url=db_url,
         search_type=SearchType.hybrid
-    )
+    ),
+    text_splitter=2000
 )
 
 # Storage for persistent memory
@@ -156,7 +246,7 @@ congress_analyst = Agent(
     knowledge=knowledge_base,
     tools=[DuckDuckGo(), Newspaper4k()],
     instructions=[
-        "Use ONLY the data from our Congress.gov knowledge base for current information",
+        "Use ONLY the data from our Combined knowledge base for current information",
         "When analyzing recent bills, focus on actual enactment dates and current status",
         "Provide specific bill numbers, dates, and exact titles from our knowledge base",
         "Do not rely on training data for current legislative information",
@@ -196,31 +286,66 @@ congress_analysis_team = Agent(
 )
 
 # Configuration flags
-TEST_KNOWLEDGE_ONLY = False  # Set to False to run full agent analysis
+TEST_KNOWLEDGE_ONLY = True  # Set to False to run full agent analysis
+
+def get_content_hash(content: str) -> str:
+    """Generate hash for content to check duplicates"""
+    return sha256(content.encode()).hexdigest()
+
+class ContentValidator:
+    def __init__(self, db_url: str):
+        self.db_url = db_url
+        self.conn = psycopg2.connect(db_url)
+        
+    def is_duplicate(self, table_name: str, content_hash: str) -> bool:
+        """Check if content already exists in table"""
+        with self.conn.cursor() as cur:
+            cur.execute(f"""
+                SELECT EXISTS (
+                    SELECT 1 FROM ai.{table_name} 
+                    WHERE content_hash = %s
+                )
+            """, (content_hash,))
+            return cur.fetchone()[0]
+
+    def add_content_hash(self, table_name: str, content_hash: str):
+        """Add content hash to tracking"""
+        with self.conn.cursor() as cur:
+            cur.execute(f"""
+                UPDATE ai.{table_name} 
+                SET content_hash = %s 
+                WHERE id = (
+                    SELECT id FROM ai.{table_name} 
+                    WHERE content_hash IS NULL 
+                    LIMIT 1
+                )
+            """, (content_hash,))
+        self.conn.commit()
 
 def load_knowledge_bases(force_reload=False):
     """Load all knowledge bases"""
     print("\nLoading Knowledge Bases...")
     print("-------------------------")
     
-    if force_reload:
-        print("Force reloading all knowledge...")
-        # Initialize JSON knowledge bases first
-        congress_docs.load(recreate=True, upsert=True)
-        records_knowledge.load(recreate=True, upsert=True)
-        reports_knowledge.load(recreate=True, upsert=True)
-        # Then load combined and constitutional
-        knowledge_base.load(recreate=True, upsert=True)
-        constitutional_knowledge.load(recreate=True, upsert=True)
-    else:
-        print("Updating knowledge bases...")
-        # Initialize JSON knowledge bases first
-        congress_docs.load(recreate=False, upsert=True)
-        records_knowledge.load(recreate=False, upsert=True)
-        reports_knowledge.load(recreate=False, upsert=True)
-        # Then load combined and constitutional
-        knowledge_base.load(recreate=False, upsert=True)
-        constitutional_knowledge.load(recreate=False, upsert=True)
+    try:
+        # Load individual knowledge bases
+        for kb in [congress_docs, records_knowledge, reports_knowledge, 
+                  members_knowledge, committees_knowledge, meetings_knowledge, 
+                  hearings_knowledge, nominations_knowledge]:
+            # Use upsert to update existing documents and add new ones
+            kb.load(recreate=force_reload, upsert=True)
+            print(f"✓ Updated {kb.vector_db.table_name}")
+            
+        # Load combined knowledge base
+        knowledge_base.load(recreate=force_reload, upsert=True)
+        print("✓ Updated combined knowledge")
+        
+        # Load constitutional knowledge
+        constitutional_knowledge.load(recreate=force_reload, upsert=True)
+        print("✓ Updated constitutional knowledge")
+        
+    except Exception as e:
+        print(f"Error loading knowledge bases: {str(e)}")
 
 def analyze_bills_with_historical_perspective():
     """Analyze bills with both modern and historical constitutional perspectives"""
@@ -246,18 +371,42 @@ def verify_json_data():
                 print(f"Structure: {list(data.keys())}")
                 print(f"Size: {len(str(data))} characters")
 
-if __name__ == "__main__":
-    # Fetch fresh data if needed
-    data_updated = False
-    if not (data_dir / "bills.json").exists():
-        fetch_and_save_congress_data()
-        data_updated = True
+def verify_all_json_data():
+    """Verify all JSON files exist and contain data"""
+    expected_files = [
+        "bills.json",
+        "records.json",
+        "reports.json",
+        "members.json",
+        "committees.json",
+        "committee_meetings.json",
+        "hearings.json",
+        "committee_prints.json",
+        "nominations.json",
+        "treaties.json"
+    ]
     
-    # Verify JSON data
-    verify_json_data()
+    print("\nVerifying all JSON files:")
+    print("------------------------")
+    
+    for file in expected_files:
+        path = data_dir / file
+        if path.exists():
+            with open(path) as f:
+                data = json.load(f)
+                print(f"✓ {file:<20} - Keys: {list(data.keys())}")
+        else:
+            print(f"✗ {file:<20} - File not found")
+
+if __name__ == "__main__":
+    # Check for updates
+    fetch_and_save_congress_data(force_update=False)
+    
+    # Verify all JSON data
+    verify_all_json_data()
     
     # Load knowledge bases
-    load_knowledge_bases(force_reload=data_updated)
+    load_knowledge_bases(force_reload=False)
     
     # Only run agent analysis if not in test mode
     if not TEST_KNOWLEDGE_ONLY:

@@ -1,0 +1,18 @@
+{
+  "citation": "PN2015",
+  "congress": 118,
+  "description": "Anthony J. Brindisi, of New York, to be United States District Judge for the Northern District of New York, vice David N. Hurd, retiring.",
+  "latestAction": {
+    "actionDate": "2024-12-04",
+    "text": "Confirmed by the Senate by Yea-Nay Vote. 50 - 49. Record Vote Number: 310."
+  },
+  "nominationType": {
+    "isCivilian": true
+  },
+  "number": 2015,
+  "organization": "The Judiciary",
+  "partNumber": "00",
+  "receivedDate": "2024-07-31",
+  "updateDate": "2024-12-05T05:14:15Z",
+  "url": "https://api.congress.gov/v3/nomination/118/2015?format=json"
+}

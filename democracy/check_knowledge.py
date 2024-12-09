@@ -1,10 +1,24 @@
+import json
+from datetime import datetime, timedelta
 import psycopg2
 from psycopg2.extras import RealDictCursor
 from pathlib import Path
 
+def check_data_freshness(file_path):
+    """Check if data file is from today"""
+    try:
+        with open(file_path) as f:
+            data = json.load(f)
+            # Most Congress.gov responses include updateDate
+            if 'updateDate' in data:
+                last_update = datetime.strptime(data['updateDate'].split('T')[0], '%Y-%m-%d')
+                return datetime.now().date() - last_update.date() <= timedelta(days=1)
+            return False
+    except:
+        return False
+
 def check_knowledge_bases():
-    """Quick check if knowledge bases are populated"""
-    # First check if data files exist
+    """Quick check if knowledge bases are populated and fresh"""
     data_dir = Path("democracy/data")
     expected_files = ["bills.json", "records.json", "reports.json"]
     
@@ -12,8 +26,11 @@ def check_knowledge_bases():
     print("----------------")
     for file in expected_files:
         path = data_dir / file
-        status = "✓" if path.exists() else "✗"
-        print(f"{status} {file}")
+        exists = path.exists()
+        fresh = check_data_freshness(path) if exists else False
+        status = "✓" if exists and fresh else "!" if exists else "✗"
+        freshness = "up-to-date" if fresh else "stale" if exists else "missing"
+        print(f"{status} {file} ({freshness})")
     
     # Then check database tables
     conn = psycopg2.connect("postgresql://ai:ai@localhost:5532/ai")

@@ -1,0 +1,15 @@
+{
+  "congress": 118,
+  "latestAction": {
+    "actionDate": "2024-12-06",
+    "text": "Referred to the House Committee on Veterans' Affairs."
+  },
+  "number": "10327",
+  "originChamber": "House",
+  "originChamberCode": "H",
+  "title": "To amend title 38, United States Code, to authorize veterans who are entitled to educational assistance under the Post-9/11 Educational Assistance Program of the Department of Veterans Affairs to use such entitlement to participate in a career transition internship program for veterans.",
+  "type": "HR",
+  "updateDate": "2024-12-07",
+  "updateDateIncludingText": "2024-12-07",
+  "url": "https://api.congress.gov/v3/bill/118/hr/10327?format=json"
+}
