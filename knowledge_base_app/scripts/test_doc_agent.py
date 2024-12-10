@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from rich.console import Console
 from rich.panel import Panel
@@ -16,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 console = Console()
 
-async def main():
+def main():
     try:
         # Initialize the Documentation Agent
         logger.info("Initializing DocumentationAgent...")
@@ -49,7 +48,7 @@ async def main():
             
             # Process the query
             logger.info(f"Processing query: {question}")
-            response = await doc_agent.query(question)
+            response = doc_agent.query(question)
             
             if response["status"] == "success":
                 # Print the response
@@ -77,4 +76,4 @@ async def main():
         ))
 
 if __name__ == "__main__":
-    asyncio.run(main()) 
+    main() 
