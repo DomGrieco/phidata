@@ -33,33 +33,29 @@ def display_stats(stats: Dict[str, Any]):
     else:
         st.sidebar.error(f"Error getting statistics: {stats['message']}")
 
-def format_document_info(doc: Dict[str, Any]) -> str:
-    """Format document information for display"""
+def format_source_info(source: Dict[str, Any]) -> str:
+    """Format source information for display"""
     try:
         parts = []
         
         # Document name
-        name = doc.get("name", "Unknown Document")
+        name = source.get("name", "Unknown Document")
         parts.append(f"📄 **{name}**")
         
         # Section information
-        section = doc.get("section")
+        section = source.get("section")
         if section and section != "General":
             parts.append(f"📌 {section}")
         
         # Page number if available
-        page = doc.get("page")
+        page = source.get("page")
         if page:
             parts.append(f"📃 Page {page}")
         
-        # Always show relevance score
-        score = doc.get("relevance_score", 0.0)
-        parts.append(f"🎯 Score: {score:.2f}")
-        
         return " | ".join(parts)
     except Exception as e:
-        logger.warning(f"Error formatting document info: {str(e)}")
-        return "📄 Unknown Document"
+        logger.warning(f"Error formatting source info: {str(e)}")
+        return "📄 Unknown Source"
 
 def main():
     # Set page config
@@ -106,26 +102,13 @@ def main():
                     response_placeholder.markdown("### Answer")
                     response_placeholder.markdown(response["response"])
                     
-                    # Display relevant documents
-                    if response["relevant_documents"]:
+                    # Display sources if available
+                    sources = response["metadata"].get("sources", [])
+                    if sources:
                         with sources_placeholder.expander("📑 Source Documents", expanded=True):
-                            st.markdown("Referenced from (sorted by relevance):")
-                            
-                            # Sort documents by relevance score
-                            sorted_docs = sorted(
-                                response["relevant_documents"],
-                                key=lambda x: x.get("relevance_score", 0),
-                                reverse=True
-                            )
-                            
-                            # Display documents with a minimum score threshold
-                            for doc in sorted_docs:
-                                if doc.get("relevance_score", 0) >= 0.5:  # Only show relevant matches
-                                    st.markdown(format_document_info(doc))
-                            
-                            # Show metadata
-                            st.markdown("---")
-                            st.markdown(f"🎯 **Top relevance score:** {response['metadata'].get('top_score', 0):.2f}")
+                            st.markdown("Referenced from:")
+                            for source in sources:
+                                st.markdown(format_source_info(source))
                 else:
                     response_placeholder.error(f"Error: {response['message']}")
                     
