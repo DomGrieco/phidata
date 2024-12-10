@@ -52,6 +52,10 @@ def format_document_info(doc: Dict[str, Any]) -> str:
         if page:
             parts.append(f"📃 Page {page}")
         
+        # Always show relevance score
+        score = doc.get("relevance_score", 0.0)
+        parts.append(f"🎯 Score: {score:.2f}")
+        
         return " | ".join(parts)
     except Exception as e:
         logger.warning(f"Error formatting document info: {str(e)}")
@@ -105,9 +109,23 @@ def main():
                     # Display relevant documents
                     if response["relevant_documents"]:
                         with sources_placeholder.expander("📑 Source Documents", expanded=True):
-                            st.markdown("Referenced from:")
-                            for doc in response["relevant_documents"]:
-                                st.markdown(format_document_info(doc))
+                            st.markdown("Referenced from (sorted by relevance):")
+                            
+                            # Sort documents by relevance score
+                            sorted_docs = sorted(
+                                response["relevant_documents"],
+                                key=lambda x: x.get("relevance_score", 0),
+                                reverse=True
+                            )
+                            
+                            # Display documents with a minimum score threshold
+                            for doc in sorted_docs:
+                                if doc.get("relevance_score", 0) >= 0.5:  # Only show relevant matches
+                                    st.markdown(format_document_info(doc))
+                            
+                            # Show metadata
+                            st.markdown("---")
+                            st.markdown(f"🎯 **Top relevance score:** {response['metadata'].get('top_score', 0):.2f}")
                 else:
                     response_placeholder.error(f"Error: {response['message']}")
                     

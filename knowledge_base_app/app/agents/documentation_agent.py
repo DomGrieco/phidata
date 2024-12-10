@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class DocumentationAgent:
-    """Agent for handling documentation-related queries and tasks"""
+    """Agent for handling documentation-related queries"""
 
     def __init__(self):
         try:
@@ -117,7 +117,7 @@ Guidelines:
 
 Format your responses in markdown for better readability."""
 
-    def extract_document_info(self, doc: Any) -> Dict[str, Any]:
+    def extract_document_info(self, doc: Any, score: Optional[float] = None) -> Dict[str, Any]:
         """Extract clean document information from various formats"""
         try:
             # If it's a string, try to extract content
@@ -130,13 +130,17 @@ Format your responses in markdown for better readability."""
                         content = doc[content_start:content_end]
                         # Split content to get document name and section
                         parts = content.split(" ", 2)
-                        if len(parts) >= 2:
-                            return {
-                                "name": parts[0],
-                                "section": parts[1] if len(parts) > 1 else "General",
-                                "content": content  # Keep the content for context
-                            }
-                return {"name": "Unknown Document", "section": "General"}
+                        return {
+                            "name": parts[0] if parts else "Unknown Document",
+                            "section": parts[1] if len(parts) > 1 else "General",
+                            "content": content,
+                            "relevance_score": score if score is not None else 0.0
+                        }
+                return {
+                    "name": "Unknown Document",
+                    "section": "General",
+                    "relevance_score": score if score is not None else 0.0
+                }
             
             # If it's a dictionary, extract relevant fields
             elif isinstance(doc, dict):
@@ -144,14 +148,96 @@ Format your responses in markdown for better readability."""
                     "name": doc.get("name", doc.get("file_name", "Unknown Document")),
                     "section": doc.get("section", "General"),
                     "page": doc.get("page", None),
-                    "content": doc.get("content", "")  # Keep the content for context
+                    "content": doc.get("content", ""),
+                    "relevance_score": score if score is not None else doc.get("score", 0.0)
                 }
             
-            return {"name": str(doc)[:50], "section": "General"}
+            return {
+                "name": str(doc)[:50],
+                "section": "General",
+                "relevance_score": score if score is not None else 0.0
+            }
             
         except Exception as e:
             logger.warning(f"Error extracting document info: {str(e)}")
-            return {"name": "Unknown Document", "section": "General"}
+            return {
+                "name": "Unknown Document",
+                "section": "General",
+                "relevance_score": score if score is not None else 0.0
+            }
+
+    def search_with_relevance(self, query: str, min_score: float = 0.5) -> List[Dict[str, Any]]:
+        """Search documents with relevance scoring"""
+        try:
+            # Use standard vector database search
+            search_results = self.knowledge.vector_db.search(
+                query=query,
+                limit=10  # Get more results initially for better filtering
+            )
+            
+            logger.info(f"Initial search returned {len(search_results) if search_results else 0} results")
+            
+            # Process and filter results
+            scored_results = []
+            for result in search_results:
+                try:
+                    # Extract score and content
+                    score = None
+                    content = None
+                    
+                    if isinstance(result, dict):
+                        score = result.get("score", None)
+                        content = result.get("content", "")
+                    elif hasattr(result, "score"):
+                        score = result.score
+                        content = getattr(result, "content", "")
+                    
+                    if score is not None:
+                        # Normalize score to 0-1 range
+                        normalized_score = float(score)
+                        if normalized_score > 1:
+                            normalized_score = normalized_score / 100
+                            
+                        # Boost score based on content relevance
+                        if content:
+                            # Check for exact phrase matches
+                            query_terms = query.lower().split()
+                            content_lower = content.lower()
+                            
+                            # Calculate term frequency score
+                            term_matches = sum(1 for term in query_terms if term in content_lower)
+                            term_score = term_matches / len(query_terms)
+                            
+                            # Boost score based on term matches
+                            normalized_score = (normalized_score + term_score) / 2
+                        
+                        # Only include results above minimum score
+                        if normalized_score >= min_score:
+                            doc_info = self.extract_document_info(result, normalized_score)
+                            if content:
+                                doc_info["content"] = content
+                            scored_results.append(doc_info)
+                            
+                            logger.debug(f"Document scored {normalized_score:.2f}: {doc_info.get('name', 'Unknown')}")
+                            
+                except Exception as e:
+                    logger.warning(f"Error processing search result: {str(e)}")
+                    continue
+            
+            # Sort by relevance score
+            scored_results.sort(key=lambda x: x.get("relevance_score", 0), reverse=True)
+            
+            logger.info(f"Found {len(scored_results)} relevant documents after scoring")
+            
+            # Log top results for debugging
+            for idx, doc in enumerate(scored_results[:3], 1):
+                logger.debug(f"Top {idx} result: {doc.get('name', 'Unknown')} (Score: {doc.get('relevance_score', 0):.2f})")
+            
+            return scored_results
+            
+        except Exception as e:
+            logger.error(f"Error in search_with_relevance: {str(e)}")
+            return []
 
     def query(self, question: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Process a documentation-related query"""
@@ -161,34 +247,29 @@ Format your responses in markdown for better readability."""
             if not hasattr(self, 'knowledge') or not hasattr(self, 'assistant'):
                 raise ValueError("Assistant or knowledge base not properly initialized")
             
-            # Search for relevant documents with a higher limit to ensure we get all relevant content
-            search_results = self.knowledge.search(query=question)
-            logger.info(f"Found {len(search_results) if search_results else 0} relevant documents")
+            # Search with relevance scoring
+            search_results = self.search_with_relevance(question)
             
-            # Clean document information before processing
-            clean_results = []
+            # Extract relevant content from scored results
             relevant_content = []
             for doc in search_results:
-                clean_doc = self.extract_document_info(doc)
-                if clean_doc:
-                    clean_results.append(clean_doc)
-                    if "content" in clean_doc:
-                        relevant_content.append(clean_doc["content"])
+                if "content" in doc and doc["content"]:
+                    relevant_content.append(f"[Score: {doc['relevance_score']:.2f}] {doc['content']}")
             
-            # Create a focused system prompt for this query
+            # Create a focused system prompt
             focused_prompt = f"""You are a documentation assistant. Answer the following question using ONLY the provided documentation context.
 If the exact information is found in the documentation, use it directly and precisely.
 If you're not sure or the information isn't explicitly stated in the provided context, say so.
 Do not make assumptions or add information not present in the documentation.
 
-Documentation context:
+Documentation context (ordered by relevance):
 {' '.join(relevant_content)}
 
 Question: {question}
 
 Please provide a precise answer based solely on the documentation provided."""
 
-            # Get response from assistant with focused prompt
+            # Get response from assistant
             response_gen = self.assistant.run(
                 message=question,
                 context={"system_prompt": focused_prompt},
@@ -214,9 +295,10 @@ Please provide a precise answer based solely on the documentation provided."""
             return {
                 "status": "success",
                 "response": final_response,
-                "relevant_documents": clean_results,
+                "relevant_documents": search_results,
                 "metadata": {
-                    "source_count": len(clean_results)
+                    "source_count": len(search_results),
+                    "top_score": search_results[0]["relevance_score"] if search_results else 0.0
                 }
             }
             
