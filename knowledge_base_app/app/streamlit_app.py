@@ -51,8 +51,14 @@ def format_source_info(source: Dict[str, Any]) -> str:
         page = source.get("page")
         if page:
             parts.append(f"📃 Page {page}")
+            
+        # Content preview if available
+        content = source.get("content", "")
+        if content:
+            preview = content[:200] + "..." if len(content) > 200 else content
+            parts.append(f"\n> {preview}")
         
-        return " | ".join(parts)
+        return "\n".join(parts)
     except Exception as e:
         logger.warning(f"Error formatting source info: {str(e)}")
         return "📄 Unknown Source"
@@ -102,13 +108,26 @@ def main():
                     response_placeholder.markdown("### Answer")
                     response_placeholder.markdown(response["response"])
                     
+                    # Display document usage information
+                    metadata = response["metadata"]
+                    st.info(f"""
+                    📊 **Document Usage:**
+                    - Total relevant documents found: {metadata.get('total_relevant_docs', 0)}
+                    - Documents used in response: {metadata.get('used_docs', 0)}
+                    """)
+                    
                     # Display sources if available
-                    sources = response["metadata"].get("sources", [])
+                    sources = metadata.get("sources", [])
                     if sources:
                         with sources_placeholder.expander("📑 Source Documents", expanded=True):
-                            st.markdown("Referenced from:")
-                            for source in sources:
+                            st.markdown("### Referenced Documentation")
+                            st.markdown("The following documents were used to generate this response:")
+                            for idx, source in enumerate(sources, 1):
+                                st.markdown(f"#### Source {idx}")
                                 st.markdown(format_source_info(source))
+                                st.markdown("---")
+                    else:
+                        st.warning("⚠️ No source documents were referenced in generating this response. The answer might be general or might need verification.")
                 else:
                     response_placeholder.error(f"Error: {response['message']}")
                     
