@@ -85,7 +85,7 @@ class DocumentationAgent:
                 name="Documentation Assistant",
                 description="I help answer questions about documentation and manage document-related tasks.",
                 llm=OpenAIChat(
-                    model="gpt-4-turbo-preview",
+                    model="gpt-4o",
                     temperature=0.7,
                     system_prompt=self._get_system_prompt(),
                 ),

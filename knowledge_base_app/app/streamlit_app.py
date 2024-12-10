@@ -2,6 +2,7 @@ import streamlit as st
 from typing import Dict, Any
 import logging
 from pathlib import Path
+import json
 
 from app.agents.documentation_agent import DocumentationAgent
 from app.config import get_settings
@@ -31,6 +32,53 @@ def display_stats(stats: Dict[str, Any]):
             st.metric("Text Documents", stats["stats"]["text_documents"])
     else:
         st.sidebar.error(f"Error getting statistics: {stats['message']}")
+
+def format_document_info(doc: Any) -> str:
+    """Format document information for display"""
+    try:
+        # If doc is a string containing JSON or dict-like data
+        if isinstance(doc, str):
+            try:
+                doc_data = json.loads(doc)
+            except json.JSONDecodeError:
+                return f"📄 {doc}"
+        else:
+            doc_data = doc
+
+        # Extract meaningful information
+        if isinstance(doc_data, dict):
+            doc_info = []
+            
+            # Get document name/path
+            if "name" in doc_data:
+                doc_info.append(f"📄 **Document:** {doc_data['name']}")
+            elif "file_path" in doc_data:
+                name = Path(doc_data['file_path']).name
+                doc_info.append(f"📄 **Document:** {name}")
+                
+            # Get section/page info
+            if "page" in doc_data:
+                doc_info.append(f"📃 **Page:** {doc_data['page']}")
+            if "section" in doc_data:
+                doc_info.append(f"📌 **Section:** {doc_data['section']}")
+                
+            # Get relevance score if available
+            if "score" in doc_data:
+                score = float(doc_data['score'])
+                doc_info.append(f"🎯 **Relevance:** {score:.2f}")
+                
+            # Get content preview if available
+            if "content" in doc_data:
+                content = doc_data['content']
+                if isinstance(content, str):
+                    preview = content[:200] + "..." if len(content) > 200 else content
+                    doc_info.append(f"📝 **Preview:** {preview}")
+            
+            return "\n\n".join(doc_info)
+        return f"📄 {str(doc)}"
+    except Exception as e:
+        logger.warning(f"Error formatting document info: {str(e)}")
+        return f"📄 {str(doc)}"
 
 def main():
     # Set page config
@@ -75,9 +123,13 @@ def main():
                     
                     # Display relevant documents
                     if response["relevant_documents"]:
-                        with st.expander("📑 Relevant Documents"):
-                            for doc in response["relevant_documents"]:
-                                st.markdown(f"- {doc}")
+                        with st.expander("📑 Source Documents", expanded=True):
+                            st.markdown("The following documents were used to generate this response:")
+                            for idx, doc in enumerate(response["relevant_documents"], 1):
+                                with st.container():
+                                    st.markdown(f"### Source {idx}")
+                                    st.markdown(format_document_info(doc))
+                                    st.markdown("---")
                 else:
                     st.error(f"Error: {response['message']}")
                     
