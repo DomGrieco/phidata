@@ -86,7 +86,7 @@ class DocumentationAgent:
                 description="I help answer questions about documentation and manage document-related tasks.",
                 llm=OpenAIChat(
                     model="gpt-4o",
-                    temperature=0.7,
+                    temperature=0.1,
                     system_prompt=self._get_system_prompt(),
                 ),
                 knowledge_base=self.knowledge,
@@ -103,7 +103,7 @@ class DocumentationAgent:
         return """You are a knowledgeable assistant specialized in handling documentation-related queries.
 Your primary responsibilities include:
 
-1. Answering questions about documents in the knowledge base
+1. Answering questions about documents in the knowledge base, refrain from making up information not found in the documents
 2. Providing relevant context and citations from documents
 3. Identifying gaps or inconsistencies in documentation
 4. Suggesting documentation updates when necessary
@@ -117,6 +117,40 @@ Guidelines:
 
 Format your responses in markdown for better readability."""
 
+    def extract_document_info(self, doc: Any) -> Dict[str, Any]:
+        """Extract clean document information from various formats"""
+        try:
+            # If it's a string, try to extract content
+            if isinstance(doc, str):
+                # Extract content between content=' and the next space
+                if "content='" in doc:
+                    content_start = doc.find("content='") + 9
+                    content_end = doc.find("'", content_start)
+                    if content_end != -1:
+                        content = doc[content_start:content_end]
+                        # Split content to get document name and section
+                        parts = content.split(" ", 2)
+                        if len(parts) >= 2:
+                            return {
+                                "name": parts[0],
+                                "section": parts[1] if len(parts) > 1 else "General"
+                            }
+                return {"name": "Unknown Document", "section": "General"}
+            
+            # If it's a dictionary, extract relevant fields
+            elif isinstance(doc, dict):
+                return {
+                    "name": doc.get("name", doc.get("file_name", "Unknown Document")),
+                    "section": doc.get("section", "General"),
+                    "page": doc.get("page", None)
+                }
+            
+            return {"name": str(doc)[:50], "section": "General"}
+            
+        except Exception as e:
+            logger.warning(f"Error extracting document info: {str(e)}")
+            return {"name": "Unknown Document", "section": "General"}
+
     def query(self, question: str, context: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Process a documentation-related query"""
         try:
@@ -125,41 +159,46 @@ Format your responses in markdown for better readability."""
             if not hasattr(self, 'knowledge') or not hasattr(self, 'assistant'):
                 raise ValueError("Assistant or knowledge base not properly initialized")
             
-            # Search for relevant documents using the correct search method
+            # Search for relevant documents
             search_results = self.knowledge.search(query=question)
             logger.info(f"Found {len(search_results) if search_results else 0} relevant documents")
             
-            # Get response from assistant and convert generator to string
+            # Clean document information before processing
+            clean_results = []
+            for doc in search_results:
+                clean_doc = self.extract_document_info(doc)
+                if clean_doc:
+                    clean_results.append(clean_doc)
+            
+            # Get response from assistant
             response_gen = self.assistant.run(
                 message=question,
                 context=context or {},
-                knowledge_base=search_results
+                knowledge_base=search_results  # Use original results for context
             )
             
-            # Convert generator to string
-            response_text = ""
-            try:
-                for chunk in response_gen:
-                    if isinstance(chunk, str):
-                        response_text += chunk
-                    elif isinstance(chunk, dict) and "content" in chunk:
-                        response_text += chunk["content"]
-                    elif hasattr(chunk, "content"):
-                        response_text += chunk.content
-            except Exception as e:
-                logger.error(f"Error processing response chunks: {str(e)}")
-                raise
-                
+            # Process response chunks efficiently
+            response_text = []
+            for chunk in response_gen:
+                if isinstance(chunk, str):
+                    response_text.append(chunk)
+                elif isinstance(chunk, dict) and "content" in chunk:
+                    response_text.append(chunk["content"])
+                elif hasattr(chunk, "content"):
+                    response_text.append(chunk.content)
+            
+            final_response = "".join(response_text)
             logger.info("Response received from assistant")
 
             return {
                 "status": "success",
-                "response": response_text,
-                "relevant_documents": search_results,
+                "response": final_response,
+                "relevant_documents": clean_results,  # Use clean results for display
                 "metadata": {
-                    "sources": getattr(response_gen, "sources", []),
+                    "source_count": len(clean_results)
                 }
             }
+            
         except Exception as e:
             logger.error(f"Error processing query: {str(e)}", exc_info=True)
             return {
@@ -167,7 +206,7 @@ Format your responses in markdown for better readability."""
                 "message": f"Failed to process documentation query: {str(e)}"
             }
 
-    def search_documents(self, query: str, limit: int = 5) -> Dict[str, Any]:
+    def search_documents(self, query: str, limit: int = 2) -> Dict[str, Any]:
         """Search for relevant documents based on a query"""
         try:
             logger.info(f"Searching documents with query: {query}")

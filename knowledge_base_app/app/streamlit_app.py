@@ -33,52 +33,29 @@ def display_stats(stats: Dict[str, Any]):
     else:
         st.sidebar.error(f"Error getting statistics: {stats['message']}")
 
-def format_document_info(doc: Any) -> str:
+def format_document_info(doc: Dict[str, Any]) -> str:
     """Format document information for display"""
     try:
-        # If doc is a string containing JSON or dict-like data
-        if isinstance(doc, str):
-            try:
-                doc_data = json.loads(doc)
-            except json.JSONDecodeError:
-                return f"📄 {doc}"
-        else:
-            doc_data = doc
-
-        # Extract meaningful information
-        if isinstance(doc_data, dict):
-            doc_info = []
-            
-            # Get document name/path
-            if "name" in doc_data:
-                doc_info.append(f"📄 **Document:** {doc_data['name']}")
-            elif "file_path" in doc_data:
-                name = Path(doc_data['file_path']).name
-                doc_info.append(f"📄 **Document:** {name}")
-                
-            # Get section/page info
-            if "page" in doc_data:
-                doc_info.append(f"📃 **Page:** {doc_data['page']}")
-            if "section" in doc_data:
-                doc_info.append(f"📌 **Section:** {doc_data['section']}")
-                
-            # Get relevance score if available
-            if "score" in doc_data:
-                score = float(doc_data['score'])
-                doc_info.append(f"🎯 **Relevance:** {score:.2f}")
-                
-            # Get content preview if available
-            if "content" in doc_data:
-                content = doc_data['content']
-                if isinstance(content, str):
-                    preview = content[:200] + "..." if len(content) > 200 else content
-                    doc_info.append(f"📝 **Preview:** {preview}")
-            
-            return "\n\n".join(doc_info)
-        return f"📄 {str(doc)}"
+        parts = []
+        
+        # Document name
+        name = doc.get("name", "Unknown Document")
+        parts.append(f"📄 **{name}**")
+        
+        # Section information
+        section = doc.get("section")
+        if section and section != "General":
+            parts.append(f"📌 {section}")
+        
+        # Page number if available
+        page = doc.get("page")
+        if page:
+            parts.append(f"📃 Page {page}")
+        
+        return " | ".join(parts)
     except Exception as e:
         logger.warning(f"Error formatting document info: {str(e)}")
-        return f"📄 {str(doc)}"
+        return "📄 Unknown Document"
 
 def main():
     # Set page config
@@ -111,31 +88,32 @@ def main():
     )
 
     if query:
+        # Create placeholder for response
+        response_placeholder = st.empty()
+        sources_placeholder = st.empty()
+        
         with st.spinner("Searching documentation..."):
             try:
                 # Process query
                 response = doc_agent.query(query)
                 
                 if response["status"] == "success":
-                    # Display response
-                    st.markdown("### Answer")
-                    st.markdown(response["response"])
+                    # Display response in placeholder
+                    response_placeholder.markdown("### Answer")
+                    response_placeholder.markdown(response["response"])
                     
                     # Display relevant documents
                     if response["relevant_documents"]:
-                        with st.expander("📑 Source Documents", expanded=True):
-                            st.markdown("The following documents were used to generate this response:")
-                            for idx, doc in enumerate(response["relevant_documents"], 1):
-                                with st.container():
-                                    st.markdown(f"### Source {idx}")
-                                    st.markdown(format_document_info(doc))
-                                    st.markdown("---")
+                        with sources_placeholder.expander("📑 Source Documents", expanded=True):
+                            st.markdown("Referenced from:")
+                            for doc in response["relevant_documents"]:
+                                st.markdown(format_document_info(doc))
                 else:
-                    st.error(f"Error: {response['message']}")
+                    response_placeholder.error(f"Error: {response['message']}")
                     
             except Exception as e:
                 logger.error(f"Error processing query: {str(e)}", exc_info=True)
-                st.error(f"An error occurred: {str(e)}")
+                response_placeholder.error(f"An error occurred: {str(e)}")
 
     # Additional features in sidebar
     st.sidebar.markdown("---")
