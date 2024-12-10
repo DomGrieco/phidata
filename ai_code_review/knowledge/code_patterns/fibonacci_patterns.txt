@@ -1,0 +1,42 @@
+"""
+Common patterns for Fibonacci implementations:
+
+1. Recursive Implementation:
+def fibonacci_recursive(n: int) -> int:
+    if n <= 1:
+        return n
+    return fibonacci_recursive(n-1) + fibonacci_recursive(n-2)
+
+2. Iterative Implementation:
+def fibonacci_iterative(n: int) -> int:
+    if n <= 1:
+        return n
+    a, b = 0, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    return b
+
+3. Generator Implementation:
+def fibonacci_generator(n: int):
+    a, b = 0, 1
+    for _ in range(n):
+        yield a
+        a, b = b, a + b
+
+4. Error Handling Pattern:
+def fibonacci(n: int) -> int:
+    if not isinstance(n, int):
+        raise TypeError("Input must be an integer")
+    if n < 0:
+        raise ValueError("Input must be non-negative")
+    # implementation here
+
+5. Performance Optimization Pattern:
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fibonacci_optimized(n: int) -> int:
+    if n <= 1:
+        return n
+    return fibonacci_optimized(n-1) + fibonacci_optimized(n-2)
+""" 
