@@ -1,11 +1,12 @@
 import streamlit as st
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 import logging
 from pathlib import Path
 import json
 
 from app.agents.documentation_agent import DocumentationAgent
 from app.config import get_settings
+from phi.document import Document
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -33,35 +34,43 @@ def display_stats(stats: Dict[str, Any]):
     else:
         st.sidebar.error(f"Error getting statistics: {stats['message']}")
 
-def format_source_info(source: Dict[str, Any]) -> str:
-    """Format source information for display"""
+def format_source_info(source: Document) -> str:
+    """Format source information for display in a concise way"""
     try:
-        parts = []
+        name = source.name or "Unknown Document"
+        meta_data = source.meta_data or {}
+        section = meta_data.get("section")
+        page = meta_data.get("page")
         
-        # Document name
-        name = source.get("name", "Unknown Document")
-        parts.append(f"📄 **{name}**")
-        
-        # Section information
-        section = source.get("section")
+        parts = [f"📄 **{name}**"]
         if section and section != "General":
-            parts.append(f"📌 {section}")
-        
-        # Page number if available
-        page = source.get("page")
+            parts.append(f"(Section: {section})")
         if page:
-            parts.append(f"📃 Page {page}")
-            
-        # Content preview if available
-        content = source.get("content", "")
-        if content:
-            preview = content[:200] + "..." if len(content) > 200 else content
-            parts.append(f"\n> {preview}")
-        
-        return "\n".join(parts)
+            parts.append(f"(Page {page})")
+        return " ".join(parts)
     except Exception as e:
         logger.warning(f"Error formatting source info: {str(e)}")
         return "📄 Unknown Source"
+
+def get_document_path(source: Document) -> Optional[str]:
+    """Get the document path from source metadata"""
+    try:
+        name = source.name
+        if not name:
+            return None
+            
+        # Check in both PDF and text directories
+        pdf_path = Path("data/pdfs") / name
+        text_path = Path("data/text") / name
+        
+        if pdf_path.exists():
+            return str(pdf_path)
+        if text_path.exists():
+            return str(text_path)
+        return None
+    except Exception as e:
+        logger.warning(f"Error getting document path: {str(e)}")
+        return None
 
 def main():
     # Set page config
@@ -122,12 +131,26 @@ def main():
                         with sources_placeholder.expander("📑 Source Documents", expanded=True):
                             st.markdown("### Referenced Documentation")
                             st.markdown("The following documents were used to generate this response:")
+                            
                             for idx, source in enumerate(sources, 1):
-                                st.markdown(f"#### Source {idx}")
-                                st.markdown(format_source_info(source))
-                                st.markdown("---")
+                                col1, col2 = st.columns([4, 1])
+                                with col1:
+                                    st.markdown(format_source_info(source))
+                                with col2:
+                                    doc_path = get_document_path(source)
+                                    if doc_path:
+                                        with open(doc_path, "rb") as f:
+                                            st.download_button(
+                                                "📥 Download",
+                                                f,
+                                                file_name=source.name or "document",
+                                                mime="application/octet-stream",
+                                                key=f"download_{idx}"
+                                            )
+                                if idx < len(sources):
+                                    st.markdown("---")
                     else:
-                        st.warning("⚠️ No source documents were referenced in generating this response. The answer might be general or might need verification.")
+                        st.warning("⚠️ No source documents were referenced in generating this response.")
                 else:
                     response_placeholder.error(f"Error: {response['message']}")
                     
