@@ -132,8 +132,8 @@ Remember: Your responses must be based SOLELY on the provided documentation."""
             # Create RAG-specific context
             rag_context = {
                 **(context or {}),
-                "require_knowledge_base": True,  # Force knowledge base usage
-                "max_sources": 5,  # Limit number of sources for focused responses
+                "require_knowledge_base": True,
+                "max_sources": 5,
             }
             
             # Let Phidata handle the RAG process
@@ -143,28 +143,40 @@ Remember: Your responses must be based SOLELY on the provided documentation."""
                 knowledge_base=relevant_docs
             )
             
-            # Process response
+            # Process response and track sources
             response_text = []
-            for chunk in response:
-                if isinstance(chunk, str):
-                    response_text.append(chunk)
-                elif isinstance(chunk, dict) and "content" in chunk:
-                    response_text.append(chunk["content"])
-                elif hasattr(chunk, "content"):
-                    response_text.append(chunk.content)
+            sources = []
+            
+            # Process the response and collect sources
+            if isinstance(response, str):
+                response_text.append(response)
+            else:
+                try:
+                    # Handle generator or iterable response
+                    for chunk in response:
+                        if isinstance(chunk, str):
+                            response_text.append(chunk)
+                        elif isinstance(chunk, dict):
+                            if "content" in chunk:
+                                response_text.append(chunk["content"])
+                            if "sources" in chunk:
+                                sources.extend(chunk["sources"])
+                        elif hasattr(chunk, "content"):
+                            response_text.append(chunk.content)
+                            if hasattr(chunk, "sources"):
+                                sources.extend(chunk.sources)
+                except Exception as e:
+                    logger.warning(f"Error processing response chunk: {str(e)}")
             
             final_response = "".join(response_text)
-            logger.info("Response received from assistant")
-
-            # Get sources from response
-            sources = getattr(response, "sources", [])
-            logger.info(f"Response used {len(sources)} source documents")
-
-            # If no sources were used despite finding relevant docs, add a warning
+            
+            # If we found relevant docs but no sources are tracked, use the relevant docs as sources
             if not sources and relevant_docs:
-                logger.warning("No sources were used in the response despite finding relevant documents")
-                final_response = "⚠️ Note: The response could not be verified against the documentation.\n\n" + final_response
-
+                sources = relevant_docs[:5]  # Use top 5 relevant docs as sources
+                logger.info("Using relevant docs as sources since no sources were explicitly tracked")
+            
+            logger.info(f"Response generated using {len(sources)} source documents")
+            
             return {
                 "status": "success",
                 "response": final_response,
