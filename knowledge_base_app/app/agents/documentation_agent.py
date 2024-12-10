@@ -133,7 +133,8 @@ Format your responses in markdown for better readability."""
                         if len(parts) >= 2:
                             return {
                                 "name": parts[0],
-                                "section": parts[1] if len(parts) > 1 else "General"
+                                "section": parts[1] if len(parts) > 1 else "General",
+                                "content": content  # Keep the content for context
                             }
                 return {"name": "Unknown Document", "section": "General"}
             
@@ -142,7 +143,8 @@ Format your responses in markdown for better readability."""
                 return {
                     "name": doc.get("name", doc.get("file_name", "Unknown Document")),
                     "section": doc.get("section", "General"),
-                    "page": doc.get("page", None)
+                    "page": doc.get("page", None),
+                    "content": doc.get("content", "")  # Keep the content for context
                 }
             
             return {"name": str(doc)[:50], "section": "General"}
@@ -159,22 +161,38 @@ Format your responses in markdown for better readability."""
             if not hasattr(self, 'knowledge') or not hasattr(self, 'assistant'):
                 raise ValueError("Assistant or knowledge base not properly initialized")
             
-            # Search for relevant documents
+            # Search for relevant documents with a higher limit to ensure we get all relevant content
             search_results = self.knowledge.search(query=question)
             logger.info(f"Found {len(search_results) if search_results else 0} relevant documents")
             
             # Clean document information before processing
             clean_results = []
+            relevant_content = []
             for doc in search_results:
                 clean_doc = self.extract_document_info(doc)
                 if clean_doc:
                     clean_results.append(clean_doc)
+                    if "content" in clean_doc:
+                        relevant_content.append(clean_doc["content"])
             
-            # Get response from assistant
+            # Create a focused system prompt for this query
+            focused_prompt = f"""You are a documentation assistant. Answer the following question using ONLY the provided documentation context.
+If the exact information is found in the documentation, use it directly and precisely.
+If you're not sure or the information isn't explicitly stated in the provided context, say so.
+Do not make assumptions or add information not present in the documentation.
+
+Documentation context:
+{' '.join(relevant_content)}
+
+Question: {question}
+
+Please provide a precise answer based solely on the documentation provided."""
+
+            # Get response from assistant with focused prompt
             response_gen = self.assistant.run(
                 message=question,
-                context=context or {},
-                knowledge_base=search_results  # Use original results for context
+                context={"system_prompt": focused_prompt},
+                knowledge_base=search_results
             )
             
             # Process response chunks efficiently
@@ -190,10 +208,13 @@ Format your responses in markdown for better readability."""
             final_response = "".join(response_text)
             logger.info("Response received from assistant")
 
+            # Log the actual content being used for debugging
+            logger.debug(f"Relevant content used for response: {relevant_content}")
+
             return {
                 "status": "success",
                 "response": final_response,
-                "relevant_documents": clean_results,  # Use clean results for display
+                "relevant_documents": clean_results,
                 "metadata": {
                     "source_count": len(clean_results)
                 }
